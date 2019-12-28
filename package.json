@@ -5,12 +5,14 @@
   "name": "hello-express",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.17.1",
+    "discord.js": "^11.5.1",
+    "robloxrankingservice": "^1.1.0"
   },
   "engines": {
     "node": "8.x"
