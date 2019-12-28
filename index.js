@@ -5,6 +5,11 @@ const robloxranking = require("robloxrankingservice");
 const gamekey = "-CkfniAak-Ip-6FbK6G4eA";
 const express = require("express");
 const app = express();
+const request = require("request")
+const apiKey = "85b9f5b7a718a8a13c4fcc7e7ad005bd";
+const oauthToken =
+  "167f004648ff9619ce3ec3072099c3f972ef138f929c57b3594b2d2bcd30c1b8";
+const Trello = require("trello-node-api")(apiKey, oauthToken);
 
 app.get("/", (request, response) => {
   response.sendStatus(200);
@@ -113,7 +118,7 @@ bot.on("message", message => {
                         message.author.send("Cancelled Prompt.");
                       } else {
                         let channel = message.guild.channels.find(
-                          c => c.name === "session-notifications"
+                          c => c.name === "session-announcements"
                         );
                         let username = msg2.content;
 
@@ -192,6 +197,52 @@ bot.on("message", message => {
         )
         .setColor("#5b9cc2");
       message.channel.send(embed);
+    }
+  }
+});
+
+bot.on("message", message => {
+  const msg = message.content.toLowerCase();
+
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  if (msg.startsWith(prefix + "blacklist")) {
+    let reason = args.slice(1).join(" ");
+    let username = args[0];
+    if (message.member.roles.find(r => r.name === "High-Rank")) {
+      getId(`${username}`, data => {
+        console.log(data);
+
+        var cardRequest = function(data) {
+          var data = {
+            name: `${username} | ${data.data}`,
+            desc: `N/A`,
+            pos: "top",
+            idList: "5dcb1b8a58b5d75dfe0d6399" //REQUIRED
+          };
+          Trello.card
+            .create(data)
+            .then(function(response) {
+              console.log("response ", response);
+            })
+            .catch(function(error) {
+              console.log("error", error);
+            });
+        };
+
+        cardRequest(data);
+
+        const embed = new Discord.RichEmbed()
+          .setTitle("User Blacklisted!")
+          .addField(
+            "The selected user was permanently banned from Twirlz.",
+            "They will now be prevented from joining any game associated with Twirlz."
+          )
+          .addField("Username", `${username}`)
+          .addField("UserId", `${data.data}`)
+          .setColor(0x59e68e);
+        message.channel.send(embed);
+      });
     }
   }
 });
