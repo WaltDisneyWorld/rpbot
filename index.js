@@ -209,7 +209,7 @@ bot.on("message", message => {
   if (msg.startsWith(prefix + "blacklist")) {
     let reason = args.slice(1).join(" ");
     let username = args[0];
-    if (message.member.roles.find(r => r.name === "High-Rank")) {
+    if (message.member.roles.find(r => r.name === "Senior High Rank")) {
       getId(`${username}`, data => {
         console.log(data);
 
