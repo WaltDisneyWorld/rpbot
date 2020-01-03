@@ -142,7 +142,7 @@ bot.on("message", message => {
                           .setColor(0x59e68e)
                           .setThumbnail(bot.user.avatarURL);
 
-                        channel.send("<@&660415759289286657>");
+                        channel.send("<@&662507669038301208>");
                         channel.send(embed);
                       }
                     });
