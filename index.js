@@ -247,9 +247,15 @@ bot.on("message", message => {
   }
 });
 
+bot.on("guildMemberAdd", function(member){
+    let guild = bot.guilds.get(680895124246757430)
+    let channel = guild.channels.get(680895362340356189)
+    channel.send('We')
+});
+
 bot.on("ready", () => { 
   console.log("Bot Enabled");
-  bot.user.setActivity("Twirlz Parlor");
+  bot.user.setActivity("Fiberize Juicery");
 });
 
 bot.login(process.env.DISCORD_TOKEN);
