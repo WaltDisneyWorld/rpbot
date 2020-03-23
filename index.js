@@ -201,62 +201,13 @@ bot.on("message", message => {
   }
 });
 
-bot.on("message", message => {
-  const msg = message.content.toLowerCase();
-
-  let messageArray = message.content.split(" ");
-  let args = messageArray.slice(1);
-  if (msg.startsWith(prefix + "blacklist")) {
-    let reason = args.slice(1).join(" ");
-    let username = args[0];
-    if (message.member.roles.find(r => r.name === "Senior High Rank")) {
-      getId(`${username}`, data => {
-        console.log(data);
-
-        var cardRequest = function(data) {
-          var data = {
-            name: `${username} | ${data.data}`,
-            desc: `N/A`,
-            pos: "top",
-            idList: "5dcb1b8a58b5d75dfe0d6399" //REQUIRED
-          };
-          Trello.card
-            .create(data)
-            .then(function(response) {
-              console.log("response ", response);
-            })
-            .catch(function(error) {
-              console.log("error", error);
-            });
-        };
-
-        cardRequest(data);
-
-        const embed = new Discord.RichEmbed()
-          .setTitle("User Blacklisted!")
-          .addField(
-            "The selected user was permanently banned from Twirlz.",
-            "They will now be prevented from joining any game associated with Twirlz."
-          )
-          .addField("Username", `${username}`)
-          .addField("UserId", `${data.data}`)
-          .setColor(0x59e68e);
-        message.channel.send(embed);
-      });
-    }
-  }
-});
 
 
  
-      console.log('hi')
-
-    let channel = bot.channels.get("680895362340356189")
-    channel.send(`Welcome to the server, nil! Be sure to read all of our rules and regulations in #info-and-rules.`)
-
+    
 bot.on("ready", () => { 
   console.log("Bot Enabled");
-  bot.user.setActivity("Fiberize Juicery");
+  bot.user.setActivity("Fiberize Juicery"); 
 });
 
 bot.login(process.env.DISCORD_TOKEN);
