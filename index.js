@@ -247,11 +247,12 @@ bot.on("message", message => {
   }
 });
 
-bot.on("guildMemberAdd", function(member){
-    let guild = bot.guilds.get(680895124246757430)
-    let channel = guild.channels.get(680895362340356189)
-    channel.send('We')
-});
+
+ 
+      console.log('hi')
+
+    let channel = bot.channels.get("680895362340356189")
+    channel.send(`Welcome to the server, nil! Be sure to read all of our rules and regulations in #info-and-rules.`)
 
 bot.on("ready", () => { 
   console.log("Bot Enabled");
