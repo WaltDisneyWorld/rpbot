@@ -75,7 +75,7 @@ const demolog = (channel, guild, author, user, member, highestRole) => {
                         .addField("Rank demoting from and to:", timestarting)
                         .addField("Reason:", newRank)
                         .addField("Proof:", username[0].url)
-                        .setColor(0x59e68e)
+                        .setColor("#5b9cc2")
                         .setThumbnail(user.avatarURL);
                       channel.send(embed);
 
@@ -108,7 +108,7 @@ const demolog = (channel, guild, author, user, member, highestRole) => {
                           .addField("Rank demoting from and to:", timestarting)
                           .addField("Reason:", newRank)
                           .addField("Proof:", username[0].url)
-                          .setColor(0x59e68e)
+                          .setColor("#5b9cc2")
                           .setThumbnail(user.avatarURL);
                         //author.send(newembed);
                       }

@@ -80,19 +80,8 @@ bot.on("message", message => {
           message.member
         );
       } else {
-        embed.setColor("#5b9cc2");
-        embed.setTitle("Unauthorised action");
-        embed.setAuthor(
-          "Bondi Beach Roleplay",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
-        );
-        embed.setDescription(
-          "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
-        );
-        embed.setTimestamp();
-
-        message.channel.send(embed);
+        const denied = require("./commands/deniedaccess")
+        denied.denied(message.channel);
       }
     }
   }
@@ -115,19 +104,8 @@ bot.on("message", message => {
           message
         );
       } else {
-        embed.setColor("#9900FF");
-        embed.setTitle("Unauthorised action");
-        embed.setAuthor(
-          "Bondi Beach Roleplay",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
-        );
-        embed.setDescription(
-          "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
-        );
-        embed.setTimestamp();
-
-        message.channel.send(embed);
+        const denied = require("./commands/deniedaccess")
+        denied.denied(message.channel);
       }
     }
   }
@@ -160,19 +138,8 @@ bot.on("message", message => {
           message.channel.send(activityEmbed);
         });
       } else {
-        embed.setColor("#9900FF");
-        embed.setTitle("Unauthorised action");
-        embed.setAuthor(
-          "Bondi Beach Roleplay",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
-          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
-        );
-        embed.setDescription(
-          "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
-        );
-        embed.setTimestamp();
-
-        message.channel.send(embed);
+        const denied = require("./commands/deniedaccess")
+        denied.denied(message.channel);
       }
     }
   }
@@ -192,6 +159,9 @@ bot.on("message", message => {
           message.member.displayName,
           message.member.highestRole.name
         );
+      } else {
+        const denied = require("./commands/deniedaccess")
+        denied.denied(message.channel);
       }
     }
   }
@@ -221,7 +191,7 @@ bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     if (message.content.startsWith(prefix + "help")) {
       const help = require("./commands/help");
-      help.help(message.channel);
+      help.help(message.author, message.channel);
     }
   }
 });

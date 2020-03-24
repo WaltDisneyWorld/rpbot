@@ -1,4 +1,5 @@
-const help = () => {
+const Discord = require("discord.js")
+const help = (author, channel) => {
     let embed = new Discord.RichEmbed();
     embed.setTitle("Commands");
     embed.setDescription("A list of all commands for this bot!");
@@ -23,7 +24,8 @@ const help = () => {
         "!reform\n!nonwarnreform\n!activitywarn\n!reset-activity\n!activity-warnings\n!2-warnings\n!updatelb\n!leaderboard\n!makerole\n!fixed\n!addactivity\n!minusactivity"
     );
     embed.setColor("#5b9cc2");
-    message.channel.send(embed);
+    channel.send("**Please check your DMs for more information on my commands!**")
+    author.send(embed);
 }
 
 exports.help = help
