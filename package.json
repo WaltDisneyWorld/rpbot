@@ -5,16 +5,33 @@
   "name": "hello-express",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
     "discord.js": "^11.5.1",
+    "express": "^4.17.1",
+    "fs": "^0.0.2",
+    "google-spreadsheet": "^3.0.10",
+    "mongodb": "^3.5.5",
+    "mongoose": "^5.9.6",
+    "request": "^2.88.2",
     "robloxrankingservice": "^1.1.0",
-    "request": "^2.88.0",
-    "trello-node-api": "^0.0.7"
+    "trello-node-api": "^0.0.8",
+    "util": "^0.12.1",
+    "uuid": "^7.0.2",
+    "canvas": "^2.6.1",
+    "noblox.js": "^4.5.0",
+    "random-words": "^1.1.0",
+    "ytsearcher": "^1.2.2",
+    "ytpl": "^0.1.20",
+    "ytdl-core": "^2.0.1",
+    "discord.js-musicbot-addon": "^13.9.1",
+    "ffmpeg": "^0.0.4",
+    "discord.js-commando": "^0.10.0",
+    "path": "^0.12.7",
+    "simple-youtube-api": "^5.2.1"
   },
   "engines": {
     "node": "8.x"
@@ -26,6 +43,8 @@
   "keywords": [
     "node",
     "glitch",
-    "express"
+    "express",
+    "mongodb",
+    "database"
   ]
 }
