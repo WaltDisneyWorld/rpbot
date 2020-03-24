@@ -16,147 +16,6 @@ app.get("/", (request, response) => {
 });
 app.listen(process.env.PORT);
 
-const getId = function(username, cb) {
-  if (username) {
-    request(
-      "https://users.roblox.com/v1/usernames/users",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json" 
-        }, //where???
-        body: `{
-                "usernames": [
-                  "${username}"
-                ]
-              }`
-      },
-      function(err, res, data) {
-        try {
-          if (err) {
-            cb({
-              success: false
-            });
-          } else {
-            if (res.statusCode == 429) {
-              setTimeout(function() {
-                module.exports(username, cb);
-              }, 2000);
-            } else if (res.statusCode == 404) {
-              cb({
-                success: false
-              });
-            } else {
-              cb({
-                success: true,
-                data: JSON.parse(data)["data"][0]["id"]
-              });
-            }
-          }
-        } catch (err) {
-          cb({
-            success: false
-          });
-        }
-      }
-    );
-  } else {
-    cb({
-      success: false
-    });
-  }
-};
-
-bot.on("message", message => {
-  if (message.guild !== null && message.member !== null) {
-    if (message.content.startsWith(prefix + "session")) {
-      if (message.member.roles.find("name", "Sessions")) {
-        message.channel.send(
-          "Check your direct messages for more information."
-        );
-        var channel = null;
-        if (channel == null) {
-          message.author.createDM().then(chan => {
-            channel = chan;
-
-            const collector = new Discord.MessageCollector(
-              channel,
-              m => m.author.id == message.author.id,
-              { maxMatches: 1 }
-            );
-            message.author.send(
-              "What type of session are you hosting? Please reply with either **shift**, or **training**."
-            );
-            collector.on("collect", msg => {
-              if (msg.content.toLowerCase() === "cancel") {
-                message.author.send("Cancelled Prompt.");
-              } else {
-                let sessiontype = msg.content;
-                message.author.send(
-                  "Alright! What time is the session starting at? Make sure you put the time in EST."
-                );
-                const collector1 = new Discord.MessageCollector(
-                  channel,
-                  m => m.author.id == message.author.id,
-                  { maxMatches: 1 }
-                );
-
-                collector1.on("collect", msg1 => {
-                  if (msg1.content.toLowerCase() === "cancel") {
-                    message.author.send("Cancelled Prompt.");
-                  } else {
-                    let timestarting = msg1.content.toUpperCase();
-                    message.author.send("Please send your Roblox username.");
-                    const collector2 = new Discord.MessageCollector(
-                      channel,
-                      m => m.author.id == message.author.id,
-                      { maxMatches: 1 }
-                    );
-
-                    collector2.on("collect", msg2 => {
-                      if (msg1.content.toLowerCase() === "cancel") {
-                        message.author.send("Cancelled Prompt.");
-                      } else {
-                        let channel = message.guild.channels.find(
-                          c => c.name === "session-announcements"
-                        );
-                        let username = msg2.content;
-
-                        message.author.send(
-                          `Thanks! I'm now sending the notification on Discord and Roblox.`
-                        );
-                        robloxranking.shout(
-                          gamekey,
-                          4944028,
-                          `A ${sessiontype} is currently being hosted by ${username} at ${timestarting} Eastern Standard Time. Why not come on down and attend?`
-                        );
-                        let embed = new Discord.RichEmbed()
-                          .setTitle("Session Scheduled")
-                          .addField("Session Type:", sessiontype)
-                          .addField("Session Host:", username)
-                          .addField("Starting At:", timestarting)
-                          .addField(
-                            "Link:",
-                            "[Group Page](https://www.roblox.com/groups/5368531/Twirlz#!/about)"
-                          )
-                          .setColor(0x59e68e)
-                          .setThumbnail(bot.user.avatarURL);
-
-                        channel.send("<@&662507669038301208>");
-                        channel.send(embed);
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          });
-        }
-      }
-    }
-  }
-});
-
 
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
@@ -202,8 +61,35 @@ bot.on("message", message => {
 });
 
 
-
- 
+bot.on("message", message => {
+  if (message.content.startsWith(prefix + "help")) {
+    let embed = new Discord.RichEmbed();
+    embed.setTitle("Commands");
+    embed.setDescription("A list of all commands for this bot!");
+    embed.addField(
+      "General commands",
+      "!help\n!bondiverify\n!verifyhelp\n!verifycheck\n!suggest\n"
+    );
+    embed.addField(
+      "Staff commands",
+      "!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!bondiverify\n!verifyhelp\n!verifycheck\n!suggest"
+    );
+    embed.addField(
+      "SR commands",
+      "!promolog\n!demolog\n!suspendlog\n!info\n!dm\n!staffwarn\n!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!bondiverify\n!verifyhelp\n!verifycheck\n!suggest"
+    );
+    embed.addField(
+      "Excutive commands",
+      "!promolog\n!demolog\n!suspendlog\n!channelactivity\n!info\n!announce\n!srannounce\n!dm\n!staffwarn\n!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!appealslink\n!help\n!bondiverify\n!verifyhelp\n!verifycheck\n!suggest"
+    );
+    embed.addField(
+      "Freeze and Ethans commands",
+      "!reform\n!nonwarnreform\n!activitywarn\n!reset-activity\n!activity-warnings\n!2-warnings\n!updatelb\n!leaderboard\n!makerole\n!fixed\n!addactivity\n!minusactivity"
+    );
+    embed.setColor(0x59e68e);
+    message.channel.send(embed);
+  }
+});
     
 bot.on("ready", () => { 
   console.log("Bot Enabled");
