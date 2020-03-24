@@ -10,7 +10,7 @@ const apiKey = "85b9f5b7a718a8a13c4fcc7e7ad005bd";
 const oauthToken =
   "167f004648ff9619ce3ec3072099c3f972ef138f929c57b3594b2d2bcd30c1b8";
 const Trello = require("trello-node-api")(apiKey, oauthToken);
-
+const denied = require("./commands/deniedaccess")
 app.get("/", (request, response) => {
   response.sendStatus(200);
 });
@@ -80,7 +80,6 @@ bot.on("message", message => {
           message.member
         );
       } else {
-        const denied = require("./commands/deniedaccess")
         denied.denied(message.channel);
       }
     }
@@ -104,7 +103,7 @@ bot.on("message", message => {
           message
         );
       } else {
-        const denied = require("./commands/deniedaccess")
+
         denied.denied(message.channel);
       }
     }
@@ -118,27 +117,10 @@ bot.on("message", message => {
       let args = messageArray.slice(1);
       let username = args[0];
       if (message.member.roles.find("name", "Super Rank")) {
-        InactivityDB.find({ username: username }, (err, activity) => {
-          console.log(activity);
-          let activityEmbed = new Discord.RichEmbed();
-          for (var activity of activity) {
-            activityEmbed.setTitle("Inactivity notice");
-            activityEmbed.addField("Username", activity.username, true);
-            activityEmbed.addField("Rank", activity.rank, true);
-            activityEmbed.addField("Start date", activity.startdate, true);
-            activityEmbed.addField("End date", activity.enddate, true);
-            activityEmbed.addField("Reason", activity.reason, true);
-            activityEmbed.setColor(0x59e68e);
-            activityEmbed.setTimestamp();
-            activityEmbed.setThumbnail(
-              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
-            );
-            activityEmbed.setAuthor("Bondi Beach Roleplay");
-          }
-          message.channel.send(activityEmbed);
-        });
+        const viewnotice = require("./commands/inactivitynoticecmds")
+        viewnotice.viewnotice(message)
+
       } else {
-        const denied = require("./commands/deniedaccess")
         denied.denied(message.channel);
       }
     }
@@ -160,7 +142,6 @@ bot.on("message", message => {
           message.member.highestRole.name
         );
       } else {
-        const denied = require("./commands/deniedaccess")
         denied.denied(message.channel);
       }
     }
@@ -180,7 +161,6 @@ bot.on("message", message => {
         infractions.infractions(message.channel, username);
       }
     } else {
-      const denied = require("./commands/deniedaccess")
       denied.denied(message.channel);
     }
   }
@@ -204,7 +184,28 @@ bot.on("message", message => {
   }
 });
 //Announcement commands
-
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "srannounce")) {
+      if (message.member.roles.find("name", "Super Rank")) {
+        const srannounce = require("./commands/announcements");
+        srannounce.srannounce(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member.displayName,
+          message.member.highestRole.name,
+          message.member,
+          message.content,
+          message
+        );
+      } else {
+        denied.denied(message.channel);
+      }
+    }
+  }
+});
 //Help commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {

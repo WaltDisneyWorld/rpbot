@@ -79,12 +79,12 @@ const inactivitynotice = (channel, guild, author, user, member, highestRole, mes
                             newNotice.save();
                             let role = guild.roles.find(n => n.name === "On Inactivity")
                             messagemember.addRole(role)
-                        //     let channel3 = guild.channels.find(
-                        //         c => c.name === "bondi-bot-logs"
-                        //     );
-                        //     channel3.send(
-                        //         `Inactivity notice of ${username} successfully logged on the database`
-                        //     );
+                            //     let channel3 = guild.channels.find(
+                            //         c => c.name === "bondi-bot-logs"
+                            //     );
+                            //     channel3.send(
+                            //         `Inactivity notice of ${username} successfully logged on the database`
+                            //     );
 
                         });
                     });
@@ -123,3 +123,23 @@ const endnotice = (channel, guild, author, user, member, highestRole, messagemem
 }
 
 exports.endnotice = endnotice
+
+const viewnotice = (username) => {
+    InactivityDB.find({ username: username }, (err, activity) => {
+        console.log(activity);
+        let activityEmbed = new Discord.RichEmbed();
+        for (var activity of activity) {
+            activityEmbed.setTitle("Inactivity notice");
+            activityEmbed.addField("Username", activity.username, true);
+            activityEmbed.addField("Rank", activity.rank, true);
+            activityEmbed.addField("Start date", activity.startdate, true);
+            activityEmbed.addField("End date", activity.enddate, true);
+            activityEmbed.addField("Reason", activity.reason, true);
+            activityEmbed.setColor("#5b9cc2");
+            activityEmbed.setTimestamp();
+            activityEmbed.setAuthor("Fiberize");
+        }
+        message.channel.send(activityEmbed);
+    });
+}
+exports.viewnotice = viewnotice
