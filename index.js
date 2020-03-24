@@ -166,8 +166,26 @@ bot.on("message", message => {
     }
   }
 });
-
-//Log commands
+//Moderation commands
+bot.on("message", message => {
+  if (message.content.startsWith(prefix + "infractions")) {
+    if (message.member.roles.find(r => r.name === "Super Rank")) {
+      let messageArray = message.content.split(" ");
+      let args = messageArray.slice(1);
+      let username = args[0];
+      if (!username) {
+        message.channel.send("Please provide a username");
+      } else {
+        const infractions = require("./commands/infractions");
+        infractions.infractions(message.channel, username);
+      }
+    } else {
+      const denied = require("./commands/deniedaccess")
+      denied.denied(message.channel);
+    }
+  }
+});
+//Logging
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     if (message.content.startsWith(prefix + "demolog")) {
@@ -181,6 +199,55 @@ bot.on("message", message => {
           message.member.displayName,
           message.member.highestRole.name
         );
+      }
+    }
+  }
+});
+//Announcement commands
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "srannounce")) {
+      if (message.member.roles.find("name", "Executive")) {
+        message.channel.send(
+          "Check your direct messages for more information."
+        );
+        var channel = null;
+        if (channel == null) {
+          message.author.createDM().then(chan => {
+            channel = chan;
+            const collector = new Discord.MessageCollector(
+              channel,
+              m => m.author.id == message.author.id,
+              { maxMatches: 1 }
+            );
+            message.author.send("Title of the announcement:");
+            collector.on("collect", msg => {
+              let announcetitle = msg.content;
+              message.author.send("Description of the announcement:");
+              const collector1 = new Discord.MessageCollector(
+                channel,
+                m => m.author.id == message.author.id,
+                { maxMatches: 1 }
+              );
+              collector1.on("collect", msg1 => {
+                let announcedescription = msg1.content;
+                let channel = message.guild.channels.find(
+                  c => c.name === "sr-notifications"
+                );
+                let embed = new Discord.RichEmbed()
+                  .setTitle(announcetitle)
+                  .setColor(0x59e68e)
+                  .setThumbnail(bot.user.avatarURL)
+                  .setDescription(announcedescription);
+                channel.send("@everyone");
+                channel.send(embed);
+                message.author.send(
+                  `The notification is now being sent in sr notifications.`
+                );
+              });
+            });
+          });
+        }
       }
     }
   }
