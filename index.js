@@ -147,6 +147,26 @@ bot.on("message", message => {
     }
   }
 });
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "logsession")) {
+      if (message.member.roles.find("name", "Sessions")) {
+        const logsession = require("./commands/sessionlog");
+        logsession.logsession(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member,
+          message.member.highestRole.name
+        );
+      } else {
+        denied.denied(message.channel);
+      }
+    }
+  }
+});
 //Moderation commands
 bot.on("message", message => {
   if (message.content.startsWith(prefix + "infractions")) {
