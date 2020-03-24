@@ -203,6 +203,76 @@ bot.on("message", message => {
     }
   }
 });
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "promolog")) {
+      if (message.member.roles.find("name", "Super Rank")) {
+        const promolog = require("./commands/promolog");
+        promolog.promolog(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member.displayName,
+          message.member.highestRole.name
+        );
+      }
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.channel.id === "692138028583354438") {
+    let ActivityToAddVar = message.content;
+    var ActivityToAdd = parseInt(ActivityToAddVar, 10);
+    dmuseractivity(message.author.username, message.content);
+    ActivityDB.findOne(
+      { username: message.author.username },
+      (err, activity) => {
+        if (err) console.log(err);
+        if (!activity) {
+          const newActivity = new ActivityDB({
+            username: message.author.username,
+            activity: ActivityToAdd,
+            warnings: 0,
+            sessions: 0,
+            inactivity: false
+          });
+          newActivity.save();
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", message.author.username, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.setColor("#5b9cc2");
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`692138091862949979`).send(activityEmbed);
+          console.log("Saved");
+        } else {
+          activity.activity = activity.activity++ + ActivityToAdd;
+          activity.save().catch(err => console.log(err));
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", message.author.username, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.addField("Total", `${activity.activity} minutes`, true);
+          activityEmbed.setColor("#5b9cc2");
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`692138091862949979`).send(activityEmbed);
+          console.log("Saved");
+        }
+      }
+    );
+  }
+});
 //Announcement commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
