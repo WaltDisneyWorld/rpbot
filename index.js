@@ -336,7 +336,7 @@ bot.on("message", message => {
         );
       } else {
         let embed = new Discord.RichEmbed()
-          .setColor(0x59e68e)
+        .setColor("#5b9cc2")
           .setTitle("Error")
           .addField(
             "Missing Permissions",
@@ -347,7 +347,41 @@ bot.on("message", message => {
     }
   }
 });
-
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "verifycheck")) {
+      if (
+        message.member.roles.find("name", "Middle Rank") ||
+        message.member.roles.find("name", "High Rank") ||
+        message.member.roles.find("name", "Super Rank") ||
+        message.member.roles.find("name", "Executive")
+      ) {
+        let messageArray = message.content.split(" ");
+        let args = messageArray.slice(1);
+        let username = args[0];
+        const verifycheck = require("./commands/verifycheck");
+        verifycheck.verifycheck(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member,
+          message.member.highestRole.name,
+          username
+        );
+      } else {
+        let embed = new Discord.RichEmbed()
+          .setColor("#5b9cc2")
+          .setTitle("Error")
+          .addField(
+            "Missing Permissions",
+            "You must be a middle rank or higher to use this command."
+          );
+        message.channel.send(embed);
+      }
+    }
+  }
+});
 //Help commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {

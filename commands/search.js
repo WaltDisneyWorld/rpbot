@@ -4,62 +4,68 @@ var randomWords = require('random-words');
 const fs = require("fs");
 const verifiedDB = require("../verified.js");
 const search = (channel, guild, author, user, member, highestRole, username) => {
-  if (!username) {
-    channel.send("Please specify a ROBLOX account \n \nexample: !bondiverify azlentic")
-  } else {
-        channel.send("Check your direct messages for more information.")
-        var phrase = randomWords({ exactly: 8, join: ' ' });
-        var channel = null;
-        if (channel == null) {
-          author.createDM().then(chan => {
-            channel = chan;
-    
-            const collector = new Discord.MessageCollector(
-              channel,
-              m => m.author.id == author.id,
-              { maxMatches: 1 }
-            );
-            let embed = new Discord.RichEmbed()
-              .setTitle("Verification")
-              .setColor(0x59e68e)
-              .addField("Please put this in your status or blurb **on your roblox account** and say **done** when completed", phrase)
-              .setFooter("Say **cancel** to cancel.");
-            author.send(embed);
-            console.log(phrase)
-            collector.on("collect", msg => {
-              if (msg.content.toLowerCase() === "cancel") {
-                author.send("Cancelled Prompt.");
-              } else {
-                let done = msg.content;
-                if (done === "done") {
-                  roblox.getIdFromUsername(username).then(id => { // gets user id for the specific part of the embed
-                    if (id) {
-                      roblox.getPlayerInfo(parseInt(id)).then(function (info) {
-                        let date = new Date(info.joinDate) // states join date
-                        let dateInfo = user.extractDate(date)
-                        if (info.blurb === phrase || info.status === phrase) {
-                          author.send("Verified!")
-                          const newVerify = new verifiedDB({
-                            robloxUser: username,
-                            robloxID: id,
-                            discordID: author.id
-                          });
-                          newVerify.save();
-                          let role = guild.roles.find(n => n.name === "bondi verified")
-                          member.addRole(role)
-                        } else {
-                          author.send("Failed")
-                        }
-                      })
-                    }
-                  })
-                }
-              }
-            });
-          })
-        }
+    if (!username) {
+        channel.send("Please specify a ROBLOX account \n \nexample: !bondiverify azlentic")
+    } else {
+        verifiedDB.findOne({ username: username }, (err, information) => {
+            if (!information) {
+                //channel.send("Check your direct messages for more information.")
+                var phrase = randomWords({ exactly: 8, join: ' ' });
+                var channel = null;
+                if (channel == null) {
+                    author.createDM().then(chan => {
+                        channel = chan;
 
-  }
+                        const collector = new Discord.MessageCollector(
+                            channel,
+                            m => m.author.id == author.id,
+                            { maxMatches: 1 }
+                        );
+                        let embed = new Discord.RichEmbed()
+                            .setTitle("Verification")
+                            .setColor("#5b9cc2")
+                            .addField("Please put this in your status or blurb **on your roblox account** and say **done** when completed", phrase)
+                            .setFooter("Say **cancel** to cancel.");
+                        author.send(embed);
+                        console.log(phrase)
+                        collector.on("collect", msg => {
+                            if (msg.content.toLowerCase() === "cancel") {
+                                author.send("Cancelled Prompt.");
+                            } else {
+                                let done = msg.content;
+                                if (done === "done") {
+                                    roblox.getIdFromUsername(username).then(id => { // gets user id for the specific part of the embed
+                                        if (id) {
+                                            roblox.getPlayerInfo(parseInt(id)).then(function (info) {
+                                                let date = new Date(info.joinDate) // states join date
+                                                if (info.blurb === phrase || info.status === phrase) {
+                                                    author.send("Verified!")
+                                                    const newVerify = new verifiedDB({
+                                                        robloxUser: username,
+                                                        robloxID: id,
+                                                        discordID: author.id
+                                                    });
+                                                    newVerify.save();
+                                                    let role = guild.roles.find(n => n.name === "Fiberize Verified")
+                                                    member.addRole(role)
+                                                } else {
+                                                    author.send("Failed")
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                    })
+                }
+            } else {
+                author.send("You are already verified on our system, your verified role will be given to you now if you did not have it before.")
+            }
+        })
+
+
+    }
 }
 //   if (username) {
 //     roblox.getIdFromUsername(username).then(id => { // gets user id for the specific part of the embed
