@@ -11,6 +11,20 @@ const oauthToken =
   "167f004648ff9619ce3ec3072099c3f972ef138f929c57b3594b2d2bcd30c1b8";
 const Trello = require("trello-node-api")(apiKey, oauthToken);
 const denied = require("./commands/deniedaccess")
+const mongoose = require("mongoose");
+const ActivityDB = require("./activity.js");
+const DemotionDB = require("./demotions.js");
+const WarningsDB = require("./warnings.js");
+const SessionsDB = require("./sessions.js");
+const InactivityDB = require("./inactivity.js");
+const CommandDB = require("./commands.js");
+const ChatlogDB = require("./chatlogs.js");
+//const DiscordDB = require("./Discchatlogs.js")
+//const awardDB = require("./awards.js");
+const embed = new Discord.RichEmbed();
+mongoose.connect(
+  "mongodb+srv://FreezeBall1:Test@cluster0-oovta.mongodb.net/fiberize", { useUnifiedTopology: true },
+);
 app.get("/", (request, response) => {
   response.sendStatus(200);
 });
@@ -296,6 +310,44 @@ bot.on("message", message => {
     }
   }
 });
+
+//verification commands
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "fibverify")) {
+      if (
+        message.member.roles.find("name", "Middle Rank") ||
+        message.member.roles.find("name", "High Rank") ||
+        message.member.roles.find("name", "Super Rank") ||
+        message.member.roles.find("name", "Corporate")
+      ) {
+        let messageArray = message.content.split(" ");
+        let args = messageArray.slice(1);
+        let username = args[0];
+        const search = require("./commands/search");
+        search.search(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member,
+          message.member.highestRole.name,
+          username
+        );
+      } else {
+        let embed = new Discord.RichEmbed()
+          .setColor(0x59e68e)
+          .setTitle("Error")
+          .addField(
+            "Missing Permissions",
+            "You must be a middle rank or higher to use this command."
+          );
+        message.channel.send(embed);
+      }
+    }
+  }
+});
+
 //Help commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
