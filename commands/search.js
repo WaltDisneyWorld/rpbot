@@ -7,7 +7,8 @@ const search = (channel, guild, author, user, member, highestRole, username) => 
     if (!username) {
         channel.send("Please specify a ROBLOX account \n \nexample: !bondiverify azlentic")
     } else {
-        verifiedDB.findOne({ username: username }, (err, information) => {
+        verifiedDB.findOne({ robloxUser: member.displayName }, (err, information) => {
+            console.log(information)
             if (!information) {
                 //channel.send("Check your direct messages for more information.")
                 var phrase = randomWords({ exactly: 8, join: ' ' });
@@ -60,7 +61,14 @@ const search = (channel, guild, author, user, member, highestRole, username) => 
                     })
                 }
             } else {
-                author.send("You are already verified on our system, your verified role will be given to you now if you did not have it before.")
+                let embed = new Discord.RichEmbed()
+                .setTitle("Verified")   
+                .setDescription("You are already verified on our system, your verified role will be given to you now if you did not have it before.")
+                .setColor("#5b9cc2")
+                .setTimestamp();
+                author.send(embed)
+                let role = guild.roles.find(n => n.name === "Fiberize Verified")
+                member.addRole(role)
             }
         })
 
