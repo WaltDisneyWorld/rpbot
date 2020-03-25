@@ -240,7 +240,7 @@ bot.on("message", message => {
   if (message.channel.id === "692138028583354438") {
     let ActivityToAddVar = message.content;
     var ActivityToAdd = parseInt(ActivityToAddVar, 10);
-    dmuseractivity(message.author.username, message.content);
+    //dmuseractivity(message.author.username, message.content);
     ActivityDB.findOne(
       { username: message.author.username },
       (err, activity) => {
@@ -264,7 +264,7 @@ bot.on("message", message => {
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
           activityEmbed.setAuthor("Bondi Beach Roleplay");
-          bot.channels.get(`692138091862949979`).send(activityEmbed);
+          bot.channels.get(`692489993091940467`).send(activityEmbed);
           console.log("Saved");
         } else {
           activity.activity = activity.activity++ + ActivityToAdd;
@@ -280,7 +280,7 @@ bot.on("message", message => {
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
           activityEmbed.setAuthor("Bondi Beach Roleplay");
-          bot.channels.get(`692138091862949979`).send(activityEmbed);
+          bot.channels.get(`692489993091940467`).send(activityEmbed);
           console.log("Saved");
         }
       }
