@@ -47,7 +47,7 @@ const search = (channel, guild, author, user, member, highestRole, username) => 
                                                         discordID: author.id
                                                     });
                                                     newVerify.save();
-                                                    let role = guild.roles.find(n => n.name === "Fiberize Verified")
+                                                    let role = guild.roles.find(n => n.name === "Verified")
                                                     member.addRole(role)
                                                 } else {
                                                     author.send("Failed")
@@ -67,7 +67,7 @@ const search = (channel, guild, author, user, member, highestRole, username) => 
                 .setColor("#5b9cc2")
                 .setTimestamp();
                 author.send(embed)
-                let role = guild.roles.find(n => n.name === "Fiberize Verified")
+                let role = guild.roles.find(n => n.name === "Verified")
                 member.addRole(role)
             }
         })

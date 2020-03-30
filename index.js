@@ -314,7 +314,7 @@ bot.on("message", message => {
 //verification commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
-    if (message.content.startsWith(prefix + "noctisverify")) {
+    if (message.content.startsWith(prefix + "naverify")) {
       if (
         message.member.roles.find("name", "Middle Rank") ||
         message.member.roles.find("name", "High Rank") ||
