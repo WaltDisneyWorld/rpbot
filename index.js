@@ -314,7 +314,7 @@ bot.on("message", message => {
 //verification commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
-    if (message.content.startsWith(prefix + "fibverify")) {
+    if (message.content.startsWith(prefix + "noctisverify")) {
       if (
         message.member.roles.find("name", "Middle Rank") ||
         message.member.roles.find("name", "High Rank") ||
@@ -394,7 +394,7 @@ bot.on("message", message => {
 
 bot.on("ready", () => {
   console.log("Bot Enabled");
-  bot.user.setActivity("Fiberize Juicery");
+  bot.user.setActivity("Noctis | Management");
 });
 
 bot.login(process.env.DISCORD_TOKEN);
