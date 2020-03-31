@@ -5,7 +5,7 @@ const fs = require("fs");
 const verifiedDB = require("../verified.js");
 const search = (channel, guild, author, user, member, highestRole, username) => {
     if (!username) {
-        channel.send("Please specify a ROBLOX account \n \nexample: !bondiverify azlentic")
+        channel.send("Please specify a ROBLOX account \n \nexample: !naverify azlentic")
     } else {
         verifiedDB.findOne({ robloxUser: member.displayName }, (err, information) => {
             console.log(information)

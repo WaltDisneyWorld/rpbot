@@ -263,7 +263,7 @@ bot.on("message", message => {
           activityEmbed.setThumbnail(
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
-          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          activityEmbed.setAuthor("Noctis Asylum");
           bot.channels.get(`692489993091940467`).send(activityEmbed);
           console.log("Saved");
         } else {
@@ -279,7 +279,7 @@ bot.on("message", message => {
           activityEmbed.setThumbnail(
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
-          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          activityEmbed.setAuthor("Noctis Asylum");
           bot.channels.get(`692489993091940467`).send(activityEmbed);
           console.log("Saved");
         }
