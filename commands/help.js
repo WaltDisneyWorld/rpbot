@@ -9,7 +9,7 @@ const help = (author, channel) => {
     );
     embed.addField(
         "Staff commands",
-        "!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!bondiverify\n!verifyhelp\n!naverify\n!suggest"
+        "!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!verifyhelp\n!naverify\n!suggest"
     );
     embed.addField(
         "SR commands",

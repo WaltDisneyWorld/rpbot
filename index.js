@@ -394,7 +394,7 @@ bot.on("message", message => {
 
 bot.on("ready", () => {
   console.log("Bot Enabled");
-  bot.user.setActivity("Noctis | Management");
+  bot.user.setActivity("Prison Roleplay! | Management");
 });
 
 bot.login(process.env.DISCORD_TOKEN);
