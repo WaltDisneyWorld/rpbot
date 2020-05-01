@@ -2,7 +2,7 @@ let Discord = require("discord.js");
 const robloxranking = require("robloxrankingservice");
 const SessionsDB = require("../sessions.js");
 const ActivityDB = require("../activity.js");
-const gamekey = "-CkfniAak-Ip-6FbK6G4eA";
+const gamekey = "xLQXxsZfUH6OAWtbPaXspaHlZgwJKMUjXRIr";
 const sessions = (channel, guild, author, user, member, highestRole) => {
     channel.send(
         "Check your direct messages for more information."
@@ -63,7 +63,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                     );
                                     robloxranking.shout(
                                         gamekey,
-                                        3280897,
+                                        6056958,
                                         `A ${sessiontype} is currently being hosted by ${username} at ${timestarting} Eastern Standard Time. Why not come on down and attend?`
                                     );
                                     let embed = new Discord.RichEmbed()
