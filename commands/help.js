@@ -20,7 +20,7 @@ const help = (author, channel) => {
         "!promolog\n!demolog\n!suspendlog\n!channelactivity\n!info\n!announce\n!srannounce\n!dm\n!staffwarn\n!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!appealslink\n!help\n!naverify\n!verifyhelp\n!verifycheck\n!suggest"
     );
     embed.addField(
-        "Roblo  and Ethans commands",
+        "Roblo  and Supreme's commands",
         "!reform\n!nonwarnreform\n!activitywarn\n!reset-activity\n!activity-warnings\n!2-warnings\n!updatelb\n!leaderboard\n!makerole\n!fixed\n!addactivity\n!minusactivity"
     );
     embed.setColor("#5b9cc2");
