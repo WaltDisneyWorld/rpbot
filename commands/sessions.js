@@ -74,7 +74,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                         .setColor("#5b9cc2")
                                         .setThumbnail(user.avatarURL);
 
-                                    channel3.send("<@&691578477006028821>");
+                                    channel3.send("<@&705890232062574612>");
                                     channel3.send(embed);
 
                                     const newSession = new SessionsDB({
