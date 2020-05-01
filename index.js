@@ -1,4 +1,4 @@
-const prefix = "!"; //discord bot prefix
+const prefix = "p!"; //discord bot prefix
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const robloxranking = require("robloxrankingservice");

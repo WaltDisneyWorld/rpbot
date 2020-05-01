@@ -5,15 +5,15 @@ const help = (author, channel) => {
     embed.setDescription("A list of all commands for this bot!");
     embed.addField(
         "General commands",
-        "!help\n!naverify\n!verifyhelp\n!verifycheck\n!suggest\n"
+        "p!help\p!naverify\p!verifyhelp\p!verifycheck\p!suggest\n"
     );
     embed.addField(
         "Staff commands",
-        "!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!verifyhelp\n!naverify\n!suggest"
+        "pinactivitynotice\p!myactivity\p!staffserverlink\p!appealslink\p!help\p!verifyhelp\p!naverify\p!suggest"
     );
     embed.addField(
         "SR commands",
-        "!promolog\n!demolog\n!suspendlog\n!info\n!dm\n!staffwarn\n!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!naverify\n!verifyhelp\n!verifycheck\n!suggest"
+        "!promolog\p!demolog\p!suspendlog\p!info\p!dm\p!staffwarn\p!inactivitynotice\n!myactivity\n!staffserverlink\n!appealslink\n!help\n!naverify\n!verifyhelp\n!verifycheck\n!suggest"
     );
     embed.addField(
         "Excutive commands",
