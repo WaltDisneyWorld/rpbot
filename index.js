@@ -263,6 +263,13 @@ bot.on("message", message => {
     }
   }
 });
+bot.on("message", message => {
+  if (message.content === prefix + "logs") {
+    let roblox_payload_data =
+      "https://groups.roblox.com/v1/groups/6056958/audit-log?actionType=ChangeRank&sortOrder=Asc&limit=50";
+    message.channel.send(roblox_payload_data);
+  }
+});
 
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
