@@ -1450,7 +1450,7 @@ bot.on("message", message => {
       let messageArray = message.content.split(" ");
       let args = messageArray.slice(1);
       let username = args[0];
-      if (message.member.roles.find("name", "Super Rank")) {
+      if (message.member.roles.find("name", "SHR")) {
         CommandDB.find({ username: username }, (err, activity) => {
           console.log(activity);
           let activityEmbed = new Discord.RichEmbed()
@@ -1517,9 +1517,9 @@ bot.on("message", message => {
 
 bot.on("message", message => {
   if (message.content.startsWith(prefix + "claim")) {
-    if (message.member.roles.find(r => r.name === "Support")) {
+    if (message.member.roles.find(r => r.name === "Support Team")) {
       let channel = message.channel;
-      let role = message.guild.roles.find(r => r.name === "Support");
+      let role = message.guild.roles.find(r => r.name === "Support Team");
       let role2 = message.guild.roles.find(r => r.name === "@everyone");
       channel.overwritePermissions(role.id, {
         SEND_MESSAGES: false
