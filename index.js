@@ -5,14 +5,18 @@ const robloxranking = require("robloxrankingservice");
 const gamekey = "xLQXxsZfUH6OAWtbPaXspaHlZgwJKMUjXRIr";
 const express = require("express");
 const app = express();
-const request = require("request")
+const request = require("request");
+const fs = require("fs");
 const apiKey = "85b9f5b7a718a8a13c4fcc7e7ad005bd";
 const oauthToken =
   "167f004648ff9619ce3ec3072099c3f972ef138f929c57b3594b2d2bcd30c1b8";
+const GoogleSpreadsheet = require("google-spreadsheet");
+const { promisify } = require("util");
 const Trello = require("trello-node-api")(apiKey, oauthToken);
 const denied = require("./commands/deniedaccess")
 const mongoose = require("mongoose");
 const ActivityDB = require("./activity.js");
+const awardDB = require("./awards.js");
 const DemotionDB = require("./demotions.js");
 const WarningsDB = require("./warnings.js");
 const SessionsDB = require("./sessions.js");
@@ -861,6 +865,576 @@ bot.on("message", message => {
     }
   }
 });
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  if (message.content.startsWith(prefix + "info")) {
+    let username = args[0];
+    if (message.member.roles.find("name", "Executive")) {
+      ActivityDB.findOne({ username: username }, (err, activity) => {
+        if (err) console.log(err);
+        let embed = new Discord.RichEmbed()
+          .setTitle("Activity")
+          .setDescription(`Activity under user ${username}`)
+          .setColor(0x59e68e)
+          .setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          )
+          .setTimestamp();
+        if (!activity) {
+          embed.addField("Minutes", "0", true);
+          embed.addField("Hours", "0", true);
+          embed.addField("Activity Warnings", "0");
+          embed.addField("Staff Warnings");
+          embed.addField("Sessions Hosted", "0");
+          return message.author.send(embed);
+        } else {
+          embed.addField("Minutes", activity.activity, true);
+          embed.addField("Hours", activity.activity / 60, true);
+          embed.addField("Activity Warnings", activity.warnings);
+          embed.addField("Staff Warnings");
+          embed.addField("Sessions Hosted", activity.sessions);
+
+          return message.author.send(embed);
+        }
+      });
+    }
+  }
+});
+
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  if (message.content.startsWith(prefix + "channelactivity")) {
+    let username = args[0];
+    if (message.member.roles.find(r => r.name === "Executive")) {
+      ActivityDB.findOne({ username: username }, (err, activity) => {
+        if (err) console.log(err);
+        let embed = new Discord.RichEmbed()
+          .setTitle("Activity")
+          .setDescription(`Activity logs for ${username}`)
+          .setColor(0x59e68e)
+          .setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          )
+          .setTimestamp();
+        if (!activity) {
+          embed.addField("Total Activity", "0", true);
+          return message.channel.send(embed);
+        } else {
+          embed.addField("Total Activity", activity.activity, true);
+          embed.addField("Total Warnings", activity.warnings, true);
+          return message.channel.send(embed);
+        }
+      });
+    }
+  }
+});
+
+  // const rows = await promisify(sheet.getRows)({
+  //     offset: 1,
+  //     query: `username = azlentic`
+  // });
+
+  // bot.on('message', msg => {
+  //     if (msg.content == '!info') {
+  //         async function info(sheet) {
+  //             const rows = await promisify(sheet.getRows)({
+  //                 offset: 1,
+  //                 query: `username = ${msg.guild.member.username}`
+  //             });
+  //             console.log(rows)
+  //             msg.channel.send(rows[0].username)
+  //             for (var row of rows) {
+  //                 msg.channel.send(row.activity + "\n");
+  //                 console.log(row)
+
+  //             }
+
+  //         }
+
+  //         info(sheet)
+
+  //     }
+  // });
+
+  //   bot.on("message", msg => {
+  //     if (msg.guild !== null && msg.member !== null) {
+  //       if (msg.content == "!myactivity") {
+  //         var counts = 0;
+  //         async function info(sheet) {
+  //           const rows = await promisify(sheet.getRows)({
+  //             offset: 1,
+  //             query: `username = ${msg.member.displayName}`
+  //           });
+  //           var exampleEmbed = new Discord.RichEmbed();
+  //           var totalactivity = 0;
+  //           exampleEmbed.addField("Username:", rows[0].username, false);
+  //           for (var row of rows) {
+  //             totalactivity = totalactivity + parseInt(row.activity);
+  //             exampleEmbed.setTitle(msg.author.username);
+  //             exampleEmbed.setColor("#0D3AEE");
+  //             exampleEmbed.setURL("");
+  //             exampleEmbed.setAuthor(
+  //               "Bondi Beach Roleplay",
+  //               "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+  //               "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+  //             );
+  //             exampleEmbed.setDescription(`Logs for ${msg.author}`);
+  //             exampleEmbed.setImage(
+  //               "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+  //             );
+  //             exampleEmbed.setTimestamp();
+  //           }
+  //           exampleEmbed.addField(`total activity: `, totalactivity, false);
+  //           msg.author.send(exampleEmbed);
+  //           // console.log(rows)
+  //           // msg.channel.send(rows[0].username)
+  //           // for (var row of rows) {
+  //           //     msg.channel.send(row.activity + "\n");
+  //           //     console.log(row)
+
+  //           // }
+  //         }
+
+  //         info(sheet);
+  //       }
+  //     }
+  //   });
+
+  //   bot.on("message", msg => {
+  //     if (msg.channel.id === "639576517612929024") {
+  //       const row = {
+  //         username: msg.author.username,
+  //         activity: msg.content
+  //       };
+
+  //       promisify(sheet.addRow)(row);
+  //     }
+  //   });
+  //   bot.on("message", msg => {
+  //     if (msg.channel.id === "639576882140020764") {
+  //       const row = {
+  //         Inactivity: msg.content
+  //       };
+
+  //       promisify(sheet2.addRow)(row);
+  //     }
+  //   });
+
+  //   // rows.forEach(row => {
+  //   //     Activity(row);
+  //   // });
+
+  //   // bot.on('message', msg => {
+  //   //     if (msg.content == '!info') {
+  //   //         const rows = promisify(sheet.getRows)({
+  //   //             offset: 1,
+  //   //             query: `username = ${msg.author.username}`
+  //   //         });
+  //   //         rows.forEach(row => {
+  //   //             msg.channel.send(row)
+  //   //         });
+
+  //   //     }
+  //   // });
+
+  bot.on("message", msg => {
+    if (msg.guild !== null && msg.member !== null) {
+      if (msg.content === "!activity") {
+        var exampleEmbed = new Discord.RichEmbed();
+        if (msg.member.roles.find("name", "Executive")) {
+          doc.getInfo(function (err, info) {
+            const sheet = info.worksheets[0];
+            exampleEmbed.setTitle(sheet.title);
+            exampleEmbed.setColor("#0D3AEE");
+            exampleEmbed.setURL(
+              "https://docs.google.com/spreadsheets/d/184QdhaUAGU3LJPGE3aSIqpCl-d2oogjlWvBNmrtpqeg/edit#gid=0"
+            );
+            exampleEmbed.setAuthor(
+              "Bondi Beach Roleplay",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+            );
+            exampleEmbed.setDescription("Activity logs sheet info.");
+            exampleEmbed.addField("Row Count:", sheet.rowCount, true);
+            exampleEmbed.addField("Column count:", sheet.colCount, true);
+            exampleEmbed.setImage(
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+            );
+            exampleEmbed.setTimestamp();
+
+            msg.channel.send(exampleEmbed);
+          });
+        } else {
+          exampleEmbed.setColor("#0D3AEE");
+          exampleEmbed.setTitle("Unauthorised action");
+          exampleEmbed.setAuthor(
+            "Bondi Beach Roleplay",
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+          );
+          exampleEmbed.setDescription(
+            "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
+          );
+          exampleEmbed.setTimestamp();
+
+          msg.channel.send(exampleEmbed);
+        }
+      }
+    }
+  });
+
+  bot.on("message", msg => {
+    if (msg.guild !== null && msg.member !== null) {
+      if (msg.content === "!inactivity") {
+        var exampleEmbed = new Discord.RichEmbed();
+        if (msg.member.roles.find("name", "Executive")) {
+          doc.getInfo(function (err, info) {
+            const sheet = info.worksheets[1];
+            exampleEmbed.setTitle(sheet.title);
+            exampleEmbed.setColor("#0D3AEE");
+            exampleEmbed.setURL(
+              "https://docs.google.com/spreadsheets/d/184QdhaUAGU3LJPGE3aSIqpCl-d2oogjlWvBNmrtpqeg/edit#gid=1371951793"
+            );
+            exampleEmbed.setAuthor(
+              "Bondi Beach Roleplay",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+            );
+            exampleEmbed.setDescription("Inactivity Notice info.");
+            exampleEmbed.addField("Row Count:", sheet.rowCount, true);
+            exampleEmbed.addField("Column count:", sheet.colCount, true);
+            exampleEmbed.setImage(
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+            );
+            exampleEmbed.setTimestamp();
+
+            msg.channel.send(exampleEmbed);
+          });
+        } else {
+          exampleEmbed.setTitle("Unauthorised action");
+          exampleEmbed.setColor("#0D3AEE");
+          exampleEmbed.setAuthor(
+            "Bondi Beach Roleplay",
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+          );
+          exampleEmbed.setDescription(
+            "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
+          );
+          exampleEmbed.setTimestamp();
+
+          msg.channel.send(exampleEmbed);
+        }
+      }
+    }
+  });
+
+  bot.on("message", message => {
+    if (message.guild !== null && message.member !== null) {
+      if (message.member.roles.find(r => r.name === "Executive")) {
+        let args = message.content.substring(prefix.length).split(" ");
+        switch (args[0]) {
+          case "addcp":
+            const filter = m => m.author.id === message.author.id;
+            message.channel.send("What is the username of the CP?");
+            message.channel
+              .awaitMessages(filter, {
+                max: 1,
+                time: 200000
+              })
+              .then(collected => {
+                if (collected.first().content === "cancel") {
+                  return message.channel.send("Cancelled prompt.");
+                }
+                let thawgbwie = collected.first().content;
+
+                var TotalNum = StartingNum++ + 1;
+
+                let rank = collected.first().content;
+                const row = {
+                  username: thawgbwie,
+                  rank: "Chairperson",
+                  totals: `=VLOOKUP(A${TotalNum},Totals!A:B,2,FALSE)`,
+                  totalsessionstrainings: `=VLOOKUP(A${TotalNum},TotalSessions!G:H,2,FALSE)`,
+                  quota: `=if(lte(C${TotalNum},H${TotalNum}),FALSE,TRUE)`,
+                  inactivity: "No",
+                  warnings: "0",
+                  notouch: "29"
+                };
+
+                promisify(sheet3.addRow)(row);
+                message.channel.send("CP added!");
+                message.channel.send(TotalNum);
+              });
+        }
+      }
+    }
+  });
+
+  bot.on("message", msg => {
+    if (msg.channel.id === "639576993670627338") {
+      const exampleEmbed = new Discord.RichEmbed();
+      if (msg.member.roles.find("name", "Executive")) {
+        var counts = 0;
+        async function info(sheet) {
+          const rows = await promisify(sheet.getRows)({
+            offset: 1,
+            query: `username = ${msg.content}`
+          });
+          var totalactivity = 0;
+          exampleEmbed.addField("Username:", rows[0].username, false);
+          for (var row of rows) {
+            totalactivity = totalactivity + parseInt(row.activity);
+            exampleEmbed.setColor(0x59e68e);
+            exampleEmbed.setTitle(msg.content);
+            exampleEmbed.setURL("");
+            exampleEmbed.setAuthor(
+              "Bondi Beach Roleplay",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+            );
+            exampleEmbed.setDescription(
+              `Logs for ${msg.content}, requested by ${msg.author}`
+            );
+            exampleEmbed.addField(
+              `Activity log ${(counts = counts + 1)} `,
+              row.activity,
+              false
+            );
+            exampleEmbed.setImage(
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+            );
+            exampleEmbed.setTimestamp();
+          }
+          exampleEmbed.addField(`total activity: `, totalactivity, false);
+          bot.channels.get(`639577026038202369`).send(exampleEmbed);
+        }
+
+        info(sheet);
+      } else {
+        const exampleEmbed = new Discord.RichEmbed();
+        exampleEmbed.setColor(0x59e68e);
+        exampleEmbed.setTitle("Unauthorised action");
+        exampleEmbed.setAuthor(
+          "Bondi Beach Roleplay",
+          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+        );
+        exampleEmbed.setDescription(
+          "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
+        );
+        exampleEmbed.setTimestamp();
+
+        bot.channels.get(`639577026038202369`).send(exampleEmbed);
+      }
+    }
+  });
+
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "suggest")) {
+      message.channel.send("Check your direct messages for more information.");
+      var channel = null;
+      if (channel == null) {
+        message.author.createDM().then(chan => {
+          channel = chan;
+          const collector = new Discord.MessageCollector(
+            channel,
+            m => m.author.id == message.author.id,
+            { maxMatches: 1 }
+          );
+          message.author.send(
+            "What is the title of your suggestion? Describe it in less than 10 words."
+          );
+          collector.on("collect", msg => {
+            let titlesuggestion = msg.content;
+            message.author.send(
+              "Send a brief description of your suggestion. How can it benefit the community?"
+            );
+            const collector1 = new Discord.MessageCollector(
+              channel,
+              m => m.author.id == message.author.id,
+              { maxMatches: 1 }
+            );
+            collector1.on("collect", msg1 => {
+              let suggestiondescription = msg1.content;
+              let channel = message.guild.channels.find(
+                c => c.name === "❁suggestions"
+              );
+              let embed = new Discord.RichEmbed()
+                .setTitle(titlesuggestion)
+                .setColor(0x59e68e)
+                .setThumbnail(bot.user.avatarURL)
+                .addField("Description:", suggestiondescription)
+                .addField("Suggested By:", message.author.username);
+              channel.send(embed).then(async embedMessage => {
+                await embedMessage.react("👍");
+                await embedMessage.react("👎");
+                message.author.send(
+                  `Thanks! Your suggestion has been posted in the suggestions channel.`
+                );
+              });
+            });
+          });
+        });
+      }
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    const msg = message.content.toLowerCase();
+    if (message.author.bot) return;
+
+    const mention = message.mentions.users.first();
+    let messageArray = message.content.split(" ");
+    let args = messageArray.slice(1);
+    if (msg.startsWith(prefix + "demotion")) {
+      let reason = args.slice(1).join(" ");
+      if (message.member.roles.find(r => r.name === "Executive")) {
+        if (mention == null) {
+          return;
+        }
+        message.delete();
+        const embed = new Discord.RichEmbed()
+          .setTitle("DEMOTION NOTICE")
+          .setColor(0xe86b5a)
+          .addField(
+            `Greetings!`,
+            `We regret to inform you on behalf of the Bondi Executives of your removal from the staff team. We have found you in violation of several code of conducts. If you have any questions, please do not hesitate to contact an Executive.\n\n`
+          )
+          .addField("REASON", `${reason}`)
+          .addField("DEMOTED BY", `${message.author.username}`)
+          .setTimestamp();
+        mention.send(embed);
+      }
+    }
+  }
+});
+
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  let username = args[0];
+  let reason = args.slice(1).join(" ");
+  if ((message.channel.id === "695714871559585834"))  {
+    if (message.member.roles.find(r => r.name == "Bot Developer")) {
+      //message.channel.send("Activity added!");
+      let ActivityToAddVar = 0;
+      var ActivityToAdd = parseInt(ActivityToAddVar, 10);
+      ActivityDB.findOne({ username: message.content }, (err, activity) => {
+        if (err) console.log(err);
+        if (!activity) {
+          const newActivity = new ActivityDB({
+            username: message.content,
+            activity: 0,
+            warnings: 0
+          });
+          newActivity.save();
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", username, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`685978560359694394`).send(activityEmbed);
+          console.log("Saved");
+        } else {
+          activity.activity = activity.activity++ + ActivityToAdd;
+          activity.save().catch(err => console.log(err));
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", message.content, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.addField("Total", `${activity.activity} minutes`, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`685978560359694394`).send(activityEmbed);
+          console.log("Saved");
+        }
+      });
+    }
+  }
+});
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  let username = args[0];
+  let reason = args.slice(1).join(" ");
+  if (message.content.startsWith(prefix + "addactivity"))  {
+    if (message.member.roles.find(r => r.name == "Bot Developer")) {
+      message.channel.send("Activity added!");
+      let ActivityToAddVar = reason;
+      var ActivityToAdd = parseInt(ActivityToAddVar, 10);
+      ActivityDB.findOne({ username: username }, (err, activity) => {
+        if (err) console.log(err);
+        if (!activity) {
+          const newActivity = new ActivityDB({
+            username: username,
+            activity: ActivityToAdd,
+            warnings: 0
+          });
+          newActivity.save();
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", username, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`685978560359694394`).send(activityEmbed);
+          console.log("Saved");
+        } else {
+          activity.activity = activity.activity++ + ActivityToAdd;
+          activity.save().catch(err => console.log(err));
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", username, true);
+          activityEmbed.addField("Amount added", ActivityToAdd, true);
+          activityEmbed.addField("Total", `${activity.activity} minutes`, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`685978560359694394`).send(activityEmbed);
+          console.log("Saved");
+        }
+      });
+    }
+  }
+});
+
+var help = fs.readFileSync("./names.txt").toString().split("\n");;
+
+
+
+bot.on("message", function (message) {
+  if(message.content.startsWith(prefix + "names")){
+    help.forEach(data => {
+      bot.channels.get(`695714871559585834`).send(data);
+      bot.channels.get(`685978795576262747`).send("Activity logged for" + data);
+      message.channel.send("saved")
+      console.log(data)
+    })
+  }
+});
 //Help commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
@@ -870,6 +1444,191 @@ bot.on("message", message => {
     }
   }
 });
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "viewlogs")) {
+      let messageArray = message.content.split(" ");
+      let args = messageArray.slice(1);
+      let username = args[0];
+      if (message.member.roles.find("name", "Super Rank")) {
+        CommandDB.find({ username: username }, (err, activity) => {
+          console.log(activity);
+          let activityEmbed = new Discord.RichEmbed()
+            .setTitle("Logs for " + username)
+            .setColor(0x59e68e)
+            .setTimestamp()
+            .setThumbnail(
+              "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+            );
+          activity.forEach(activity => {
+            activityEmbed.addField(activity.username, activity.content);
+          });
+          message.channel.send(activityEmbed);
+        }).limit(25);
+        embed.setColor("#9900FF");
+        embed.setTitle("Unauthorised action");
+        embed.setAuthor(
+          "Bondi Beach Roleplay",
+          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+          "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+        );
+        embed.setDescription(
+          "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
+        );
+        embed.setTimestamp();
+
+        message.channel.send(embed);
+      }
+    }
+  }
+});
+
+// bot.on('guildMemberUpdate', (oldMember, newMember) => {
+//   let role = newMember.guild.roles.get('606704073701589014')
+//   let premium = newMember.guild.roles.get('651320090180059136')
+//   let channel = bot.guilds.get('603041320885551135').channels.get('603047463691091971')
+//   if (oldMember.roles.size < newMember.roles.size) {
+//     if (!newMember.roles.has(role)) {
+//       newMember.addRole(premium)
+//     }
+//   }
+// })
+
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  if (message.content.startsWith(prefix + "hard")) {
+    if (message.member.roles.find(r => r.name === "Bot Developer")) {
+      let channel = message.guild.channels.find(
+        c => c.name === "bondi-bot-logs"
+      );
+      awardDB.find({}, (err, activity) => {
+        console.log(activity);
+        for (var activity of activity) {
+          let activityEmbed = new Discord.RichEmbed()
+            .setTitle(activity.hardestworking)
+            .setColor(0x59e68e);
+          message.channel.send(activityEmbed);
+        }
+      });
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.content.startsWith(prefix + "claim")) {
+    if (message.member.roles.find(r => r.name === "Support")) {
+      let channel = message.channel;
+      let role = message.guild.roles.find(r => r.name === "Support");
+      let role2 = message.guild.roles.find(r => r.name === "@everyone");
+      channel.overwritePermissions(role.id, {
+        SEND_MESSAGES: false
+      });
+      channel.overwritePermissions(role.id, {
+        READ_MESSAGES: false
+      });
+      channel.overwritePermissions(message.author.id, {
+        SEND_MESSAGES: true
+      });
+      channel.overwritePermissions(message.author.id, {
+        READ_MESSAGES: true
+      });
+      let embed = new Discord.RichEmbed()
+        .setTitle("Claimed")
+        .setDescription(
+          "This ticket has been claimed by: " + message.member.displayName
+        )
+        .setColor(0x59e68e);
+      message.delete();
+      message.channel.send(embed);
+    } else {
+      embed.setColor(0x59e68e);
+      embed.setTitle("Unauthorised action");
+      embed.setAuthor(
+        "Bondi Beach Roleplay",
+        "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
+        "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
+      );
+      embed.setDescription(
+        "You are not authorised to use this command, please speak to a member of the corporate team if you think this is a mistake."
+      );
+      embed.setTimestamp();
+
+      message.channel.send(embed);
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.content.startsWith(prefix + "passed")) {
+    if (message.member.roles.find(r => r.name === "Bot Developer")) {
+      const mention = message.mentions.members.first();
+      let role = message.guild.roles.find(r => r.name === "passed training");
+      let role2 = message.guild.roles.find(r => r.name === "Sessions");
+      mention.addRole(role);
+      mention.addRole(role2);
+      message.channel.send("Roles added!");
+    }
+  }
+});
+
+
+
+
+
+bot.on("message", message => {
+  const username = message.author.username
+    try {
+  const member = message.guild.members.find(member => member.displayName === username);
+        const embed = new Discord.RichEmbed();
+  if(message.channel.id === "706987165598613534"){
+    if(!message.content){
+      console.log("No message")
+    } else {
+      if(message.content == "Good Length"){
+        embed.setTitle("APPLICATION STATUS CHANGED");
+        embed.setDescription(`Greetings ${username},\n\nYour intern application status has changed, this means that it has moved onto another stage of the marking process. Thank you for your patience while we continue to read applications! You will receive your results 1-3 days after the official closing of the applications.\n\nThis message is automated.`);
+        embed.addField("Previous status:", "Pending");
+        embed.addField("Current status: ", "Good Length");
+     
+        embed.setColor(0x59e68e);
+        member.send(embed);
+      }
+      if(message.content === "Good Grammar"){
+        embed.setTitle("APPLICATION STATUS CHANGED");
+        embed.setDescription(`Greetings ${username},\n\nYour intern application status has changed, this means that it has moved onto another stage of the marking process. Thank you for your patience while we continue to read applications! You will receive your results 1-3 days after the official closing of the applications.\n\nThis message is automated.`);
+        embed.addField("Previous status:", "Good Length");
+        embed.addField("Current status: ", "Good Grammar");
+        
+        embed.setColor(0x59e68e);
+        member.send(embed);
+      }
+      if(message.content === "Good Vocabulary"){
+        embed.setTitle("APPLICATION STATUS CHANGED");
+        embed.setDescription(`Greetings ${username},\n\nYour intern application status has changed, this means that it has moved onto the final stage of the marking process. Thank you for your patience while we continue to read applications! You will receive your results 1-3 days after the official closing of the applications.\n\nThis message is automated.`);
+        embed.addField("Previous status:", "Good Grammar");
+        embed.addField("Current status: ", "Good Vocabulary");
+        embed.setColor(0x59e68e);
+        member.send(embed);
+         }
+          if(message.content === "Pending"){
+        embed.setTitle("APPLICATION SUBMITTED")
+        embed.setDescription(`Greetings ${username},\n\nYou have successfully submitted your **INTERN APPLICATION** for review! You may have to wait up to 3 days before the results are released.\n\nThis message is automated.`)
+        embed.addField("Current status: ", "Pending");
+        embed.setColor(0x59e68e);
+        member.send(embed);
+         }
+    }
+  }
+}
+catch(error) {
+  console.error(error);
+  // expected output: ReferenceError: nonExistentFunction is not defined
+  // Note - error messages will vary depending on browser
+}
+
+});
+
 
 bot.on("ready", () => {
   console.log("Bot Enabled");
