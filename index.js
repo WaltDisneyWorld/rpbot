@@ -1549,6 +1549,27 @@ bot.on("message", message => {
     }
   }
 });
+
+bot.on("message", (message) => {
+    const msg = message.content.toLowerCase();
+    if (message.author.bot) return;
+
+    const mention = message.mentions.users.first();
+
+    if (msg.startsWith(prefix + "staffwarn")) {
+        if (message.member.roles.find(r => r.name === "SHR")) {
+            if (mention == null) { return; }
+            message.delete();
+            const mentionMessage = message.content.slice(8)
+            const embed = new Discord.RichEmbed()
+
+                .setColor(0x59E68E)
+                .addField('Staff Warning', '\n\nGreetings!\n\nOn behalf of the Prison Roleplays Staffing Department, this message is being sent to you to inform that after a heavy discussion, we have decided to give you a warning. \n\nThis staff warning was given to you by the staffing department due to multiple reasons. If you have any questions regarding the reason behind this warning, please do not hesitate to ask an Executive. We hope you understand your warning and expect you to advance forward within Prison Roleplay leaving this warning behind. \n\nWe also would like to ask that you do not share any information from this message in any Prison Roleplay! related discussions, if done so, your rank will be terminated.\n\nSincerely,\nPrison Roleplay! Staffing Department\n\n\nThis message is automated.')
+            mention.sendEmbed(embed)
+        }
+    }
+
+});
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     if (message.content.startsWith(prefix + "viewlogs")) {
