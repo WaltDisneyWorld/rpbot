@@ -705,7 +705,7 @@ bot.on("message", message => {
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
           activityEmbed.setAuthor("Bondi Beach Roleplay");
-          bot.channels.get(`660981859601088543`).send(activityEmbed);
+          bot.channels.get(`705242585559597096`).send(activityEmbed);
           console.log("Saved");
         } else {
           activity.activity = activity.activity++ + ActivityToAdd;
@@ -721,7 +721,7 @@ bot.on("message", message => {
             "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
           );
           activityEmbed.setAuthor("Bondi Beach Roleplay");
-          bot.channels.get(`660981859601088543`).send(activityEmbed);
+          bot.channels.get(`705242585559597096`).send(activityEmbed);
           console.log("Saved");
         }
       }
@@ -902,12 +902,12 @@ bot.on("message", message => {
 //verification commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
-    if (message.content.startsWith(prefix + "naverify")) {
+    if (message.content.startsWith(prefix + "verify")) {
       if (
         message.member.roles.find("name", "Middle Rank") ||
         message.member.roles.find("name", "High Rank") ||
         message.member.roles.find("name", "Super Rank") ||
-        message.member.roles.find("name", "Corporate")
+        message.member.roles.find("name", "SHR")
       ) {
         let messageArray = message.content.split(" ");
         let args = messageArray.slice(1);
@@ -1012,7 +1012,7 @@ bot.on("message", message => {
   let args = messageArray.slice(1);
   if (message.content.startsWith(prefix + "channelactivity")) {
     let username = args[0];
-    if (message.member.roles.find(r => r.name === "Executive")) {
+    if (message.member.roles.find(r => r.name === "SHR")) {
       ActivityDB.findOne({ username: username }, (err, activity) => {
         if (err) console.log(err);
         let embed = new Discord.RichEmbed()
@@ -1148,7 +1148,7 @@ bot.on("message", message => {
     if (msg.guild !== null && msg.member !== null) {
       if (msg.content === "!activity") {
         var exampleEmbed = new Discord.RichEmbed();
-        if (msg.member.roles.find("name", "Executive")) {
+        if (msg.member.roles.find("name", "SHR")) {
           doc.getInfo(function (err, info) {
             const sheet = info.worksheets[0];
             exampleEmbed.setTitle(sheet.title);
@@ -1527,14 +1527,129 @@ bot.on("message", message => {
 });
 
 var help = fs.readFileSync("./names.txt").toString().split("\n");;
+bot.on("message", message => {
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  let username = args[0];
+  let reason = args.slice(1).join(" ");
+  if (message.content.startsWith(prefix + "minusactivity")) {
+    if (message.member.roles.find(r => r.name == "Bot Developer")) {
+      message.channel.send("Activity minused!");
+      let ActivityToAddVar = reason;
+      var ActivityToAdd = parseInt(ActivityToAddVar, 10);
+      ActivityDB.findOne({ username: username }, (err, activity) => {
+        if (err) console.log(err);
+        if (!activity) {
+          const newActivity = new ActivityDB({
+            username: username,
+            activity: 0,
+            warnings: 0
+          });
+          newActivity.save();
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", username, true);
+          activityEmbed.addField("Amount minused", ActivityToAdd, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`660981859601088543`).send(activityEmbed);
+          console.log("Saved");
+        } else {
+          activity.activity = activity.activity-- - ActivityToAdd;
+          activity.save().catch(err => console.log(err));
+          let activityEmbed = new Discord.RichEmbed();
+          activityEmbed.setTitle("Activity logged");
+          activityEmbed.addField("Username", username, true);
+          activityEmbed.addField("Amount minused", ActivityToAdd, true);
+          activityEmbed.addField("Total", `${activity.activity} minutes`, true);
+          activityEmbed.setColor(0x59e68e);
+          activityEmbed.setTimestamp();
+          activityEmbed.setThumbnail(
+            "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6"
+          );
+          activityEmbed.setAuthor("Bondi Beach Roleplay");
+          bot.channels.get(`660981859601088543`).send(activityEmbed);
+          console.log("Saved");
+        }
+      });
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.content.startsWith(prefix + "info")) {
+    if (message.member.roles.find(r => r.name === "Executive")) {
+      let messageArray = message.content.split(" ");
+      let args = messageArray.slice(1);
+      let username = args[0];
+      const members = message.guild.members;
+      const member = members.find(member => member.displayName === username);
+
+      let embed = new Discord.RichEmbed()
+        .setTitle("User info")
+        .setColor(0x59e68e)
+        .addField("Username", member)
+        .setThumbnail(member.user.avatarURL)
+        .addField("Rank", member.highestRole.name)
+        .addField("ID", member.user.id)
+        .addField("Discriminator", member.user.discriminator)
+        .addField("Bot", member.user.bot)
+        .addField("Server muted", member.serverMute)
+        .addField("Server deafened", member.serverDeaf);
+      message.author.send(embed);
+    }
+  }
+});
+
+
+
+//functions
+
+function Activity(sheet) {
+  console.log(`Username: ${sheet.username}`);
+  console.log(`Activity: ${sheet.activity}`);
+  console.log(`===================`);
+}
+
+function dmuseractivity(username, activity) {
+  const data = require("./data/verified.json");
+  const result = data.find(({ robloxUsername }) => robloxUsername === username);
+  let date_ob = new Date();
+  // current hours
+  let hours = date_ob.getHours();
+
+  // current minutes
+  let minutes = date_ob.getMinutes();
+
+  // current seconds
+  let seconds = date_ob.getSeconds();
+  process.env.TZ = "Europe/Amsterdam";
+  let embed = new Discord.RichEmbed()
+    .setTitle("**Activity Added**")
+    .addField("Minutes", activity)
+    .addField("Hours", activity / 60)
+    .setColor(0x59e68e)
+    .setThumbnail(bot.user.displayAvatarURL)
+    .setTimestamp()
+
+  try {
+    bot.users.get(result.discord).send(embed);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 
 bot.on("message", function (message) {
   if(message.content.startsWith(prefix + "names")){
     help.forEach(data => {
-      bot.channels.get(`695714871559585834`).send(data);
-      bot.channels.get(`685978795576262747`).send("Activity logged for" + data);
+      bot.channels.get(`705242585559597096`).send(data);
+      bot.channels.get(`705242585559597096`).send("Activity logged for" + data);
       message.channel.send("saved")
       console.log(data)
     })
