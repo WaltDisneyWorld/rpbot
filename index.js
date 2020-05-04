@@ -211,7 +211,7 @@ bot.on("message", message => {
           .setTitle("User Blacklisted!")
           .addField(
             "The selected user was banned from all groups.",
-            "They will now be prevented from joining any game associated with 4PF."
+            "They will now be prevented from joining any game associated with Prison Roleplay!."
           )
           .addField("Username", `${username}`)
           .addField("UserId", `${data.data}`)
