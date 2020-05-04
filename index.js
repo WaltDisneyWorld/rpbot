@@ -421,7 +421,7 @@ bot.on("message", message => {
         c => c.name === "bondi-bot-logs"
       );
       let channel2 = message.guild.channels.find(
-        c => c.name === "➟announcements"
+        c => c.name === "📣announcements📣"
       );
       var conditions = { activity: { $gt: 0 } },
         update = { $set: { activity: 0 } },
