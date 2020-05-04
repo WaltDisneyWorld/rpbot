@@ -35,6 +35,58 @@ app.get("/", (request, response) => {
 app.listen(process.env.PORT);
 
 
+const getId = function(username, cb) {
+  if (username) {
+    request(
+      "https://users.roblox.com/v1/usernames/users",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json" 
+        }, //where???
+        body: `{
+                "usernames": [
+                  "${username}"
+                ]
+              }`
+      },
+      function(err, res, data) {
+        try {
+          if (err) {
+            cb({
+              success: false
+            });
+          } else {
+            if (res.statusCode == 429) {
+              setTimeout(function() {
+                module.exports(username, cb);
+              }, 2000);
+            } else if (res.statusCode == 404) {
+              cb({
+                success: false
+              });
+            } else {
+              cb({
+                success: true,
+                data: JSON.parse(data)["data"][0]["id"]
+              });
+            }
+          }
+        } catch (err) {
+          cb({
+            success: false
+          });
+        }
+      }
+    );
+  } else {
+    cb({
+      success: false
+    });
+  }
+};
+
+
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     let role = message.guild.roles.find(
@@ -124,6 +176,52 @@ bot.on("message", message => {
     }
   }
 });
+bot.on("message", message => {
+  const msg = message.content.toLowerCase();
+
+  let messageArray = message.content.split(" ");
+  let args = messageArray.slice(1);
+  if (msg.startsWith(prefix + "blacklist")) {
+    let reason = args.slice(1).join(" ");
+    let username = args[0];
+    if (message.member.roles.find(r => r.name === "SHR")) {
+      getId(`${username}`, data => {
+        console.log(data);
+
+        var cardRequest = function(data) {
+          var data = {
+            name: `${username} | ${data.data}`,
+            desc: `N/A`,
+            pos: "top",
+            idList: "5dcb1b8a58b5d75dfe0d6399" //REQUIRED
+          };
+          Trello.card
+            .create(data)
+            .then(function(response) {
+              console.log("response ", response);
+            })
+            .catch(function(error) {
+              console.log("error", error);
+            });
+        };
+
+        cardRequest(data);
+
+        const embed = new Discord.RichEmbed()
+          .setTitle("User Blacklisted!")
+          .addField(
+            "The selected user was banned from all groups.",
+            "They will now be prevented from joining any game associated with 4PF."
+          )
+          .addField("Username", `${username}`)
+          .addField("UserId", `${data.data}`)
+          .setColor(0x59e68e);
+        message.channel.send(embed);
+      });
+    }
+  }
+});
+
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     if (message.member.roles.find(r => r.name === "Bot Developer")) {
@@ -720,7 +818,7 @@ bot.on("message", message => {
 });
 
 bot.on("message", message => {
-  if (message.channel.id === "692138028583354438") {
+  if (message.channel.id === "705242585559597096") {
     let ActivityToAddVar = message.content;
     var ActivityToAdd = parseInt(ActivityToAddVar, 10);
     //dmuseractivity(message.author.username, message.content);
