@@ -942,7 +942,7 @@ bot.on("message", message => {
         message.member.roles.find("name", "Middle Rank") ||
         message.member.roles.find("name", "High Rank") ||
         message.member.roles.find("name", "Super Rank") ||
-        message.member.roles.find("name", "Executive")
+        message.member.roles.find("name", "SHR")
       ) {
         let messageArray = message.content.split(" ");
         let args = messageArray.slice(1);
