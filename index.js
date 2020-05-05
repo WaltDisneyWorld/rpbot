@@ -129,6 +129,49 @@ bot.on("message", message => {
     }
   }
 });
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    let role = message.guild.roles.find(
+      r => r.name === "Announcements"
+    );
+    const msg = message.content.toLowerCase();
+    if (message.author.bot) return;
+    const mention = message.mentions.users.first();
+    if (msg.startsWith(prefix + "pingon")) {
+      message.member.addRole(role);
+      let embed = new Discord.RichEmbed()
+        .setTitle("Announcementss Ping On")
+        .addField(
+          "You will now be pinged when things are announced",
+          "To disable being pinged for Announcementss, simply say !pingoff."
+        )
+        .setColor("#5b9cc2");
+      message.channel.send(embed);
+    }
+  }
+});
+
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    let role = message.guild.roles.find(
+      r => r.name === "Announcements"
+    );
+    const msg = message.content.toLowerCase();
+    if (message.author.bot) return;
+    if (msg.startsWith(prefix + "pingoff")) {
+      message.member.removeRole(role);
+      let embed = new Discord.RichEmbed()
+        .setTitle("Announcementss Ping Off")
+        .addField(
+          "You will no longer be pinged when things are Announced.",
+          "To enable the Announcementss ping again, simply say !pingon."
+        )
+        .setColor("#5b9cc2");
+      message.channel.send(embed);
+    }
+  }
+});
 //Inactivity notice commands
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
