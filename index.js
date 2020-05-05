@@ -657,7 +657,7 @@ bot.on("message", message => {
 
 
 bot.on("message", message => {
-  if (message.channel.id === "696287724872663100") {
+  if (message.channel.id === "707020790817751072") {
     let channel = message.guild.channels.find(c => c.name === "demotion-logs");
     let embed = new Discord.RichEmbed()
       .setTitle("Demotion log")
