@@ -178,7 +178,7 @@ bot.on("message", message => {
     if (message.content.startsWith(prefix + "inactivitynotice")) {
       if (
         message.member.roles.find("name", "Middle Rank") ||
-        message.member.roles.find("name", "Higher Rank") ||
+        message.member.roles.find("name", "High Rank") ||
         message.member.roles.find("name", "Super Rank") ||
         message.member.roles.find("name", "Executive")
       ) {
