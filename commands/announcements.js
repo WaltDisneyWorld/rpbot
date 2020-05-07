@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-
+const bot = new Discord.Client();
 const srannounce = (channel, guild, author, user, member, highestRole) => {
-    message.channel.send(
+  bot.on("message", message => { 
+  message.channel.send(
         "Check your direct messages for more information."
     );
     var channel = null;
@@ -25,14 +26,14 @@ const srannounce = (channel, guild, author, user, member, highestRole) => {
                 collector1.on("collect", msg1 => {
                     let announcedescription = msg1.content;
                     let channel = guild.channels.find(
-                        c => c.name === "702526094351400960"
+                        c => c.name === "📣announcements📣"
                     );
                     let embed = new Discord.RichEmbed()
                         .setTitle(announcetitle)
                         .setColor("#5b9cc2")
                         .setThumbnail(bot.user.avatarURL)
                         .setDescription(announcedescription);
-                    channel.send("@everyone");
+                    channel.send("@Test");
                     channel.send(embed);
                     author.send(
                         `The notification is now being sent in sr notifications.`
