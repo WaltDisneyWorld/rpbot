@@ -25,7 +25,7 @@ const srannounce = (channel, guild, author, user, member, highestRole) => {
                 collector1.on("collect", msg1 => {
                     let announcedescription = msg1.content;
                     let channel = guild.channels.find(
-                        c => c.name === "sr-notifications"
+                        c => c.name === "702526094351400960"
                     );
                     let embed = new Discord.RichEmbed()
                         .setTitle(announcetitle)
