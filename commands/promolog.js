@@ -70,7 +70,8 @@ const promolog = (channel, guild, author, user, member, highestRole) => {
                         .addField("Rank promoted to:", newRank)
                         .addField("Reason:", username)
                         .setColor("#5b9cc2")
-                        .setThumbnail(user.avatarURL);
+                        .setThumbnail(user.avatarURL)
+                        .addFooter("Made By Freezeball1");
                       channel.send(embed);
                     }
                   });
