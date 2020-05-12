@@ -391,7 +391,7 @@ bot.on("message", message => {
         embed.setColor("#0D3AEE");
         embed.setTitle("Unauthorised action");
         embed.setAuthor(
-          "Bondi Beach Roleplay",
+          "Prison Roleplay!",
           "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e6",
           "https://t2.rbxcdn.com/8e7fd992c56ba944c74c7572304bc4e"
         );
