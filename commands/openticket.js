@@ -1,43 +1,78 @@
 const Discord = require("discord.js");
 const Config = require('../settings.json');
 const RoleConfig = require('../roleSettings.json');
-const Roles = require('../rolesettings.json');
 const categoryId = Config.TicketCaterogry;
- 
+
 module.exports = class development {
     constructor(){
-            this.name = 'CloseTicket.js • Main Command',
-            this.alias = ['close'],
-            this.usage = '!close'
+            this.name = 'OpenTicket.js • Main Command',
+            this.alias = ['ticket'],
+            this.usage = '!newticket'
     }
     async run(Client,message,args) {
-            if (!message.member.roles.some(r => [Roles.SenoirRankID,Roles.AdminstratorID,Roles.HighRankID].includes(r.id)))  return message.channel.send("❌ You do not have permissions to use this command. Please contact a staff member.");
-    if (message.channel.parentID == categoryId) {
-        message.channel.delete();
-    } else {
-        message.channel.send("❌ Please do this in the ticket channel.");
-    }
- 
-    var embedCloseTicket = new Discord.RichEmbed()
-        .setTitle(`Your ticket has been closed! Thanks for using our service.`)
+    var userName = message.author.username;
+    var userDiscriminator = message.author.discriminator;
+    var bool = false;
+    
+      message.guild.channels.forEach((channel) => {
+        if (channel.name == userName.toLowerCase() + "-" + userDiscriminator) {
+            message.channel.send("You already made a ticket!");
+            bool = true;
+        }
+    });
+    if (bool == true) return;
+    var embedCreateTicket = new Discord.RichEmbed()
+        .setTitle("Ticket being made for: " + message.author.username)
+        .setDescription(`You are getting pinged to the channel.`)
         .setColor(Config.Color)
-        .setDescription("The ticket has been closed")
         .setFooter(Config.Footer)
-    var EmbedLog = new Discord.RichEmbed()
-            .setTitle(`Command logged`)
+        .setTimestamp();
+     message.channel.send(embedCreateTicket);
+  message.guild.createChannel(userName + "-" + userDiscriminator, "text").then((createdChan) => {
+ 
+        createdChan.setParent(categoryId).then((settedParent) => {
+ 
+            // Zet perms voor iedereen
+            settedParent.overwritePermissions(message.guild.roles.find('name', "@everyone"), { "READ_MESSAGES": false });
+            settedParent.overwritePermissions(message.guild.roles.find('id', `${RoleConfig.CustomerServiceID}`), { 
+              "SEND_MESSAGES": true, READ_MESSAGES: true,
+            });
+            settedParent.overwritePermissions(message.author, {
+ 
+                "READ_MESSAGES": true, "SEND_MESSAGES": true,
+                "ATTACH_FILES": true, "CONNECT": true,
+                "CREATE_INSTANT_INVITE": false, "ADD_REACTIONS": true
+
+            });
+            var EmbedLog = new Discord.RichEmbed()
+            .setTitle(`Ticket has been created for ${message.author}`)
             .setColor(Config.Color)
-            .setDescription(`${message.author} has used ` + "`-close`" + ` in ${message.channel}`)
+            .setDescription("Ticket Created")
             .setFooter(Config.Footer)
         var logChannel = message.guild.channels.find("id", Config.LogsID);
        if (!logChannel) return message.channel.send("❌ Cannot find log channel");
-      
-   var logChannel = message.guild.channels.find("id", Config.TicketLogsC);
-   if (!logChannel) return message.channel.send("❌ Cannot find log channel");
- 
-    message.author.send(embedCloseTicket);
-    }
-}
+      logChannel.send(EmbedLog)
 
+            var embedParent = new Discord.RichEmbed()
+        .setTitle("Hey! " + message.author.username.toString())
+        .setColor(Config.Color)
+        .setDescription(`Thank you for making a ticket, our Support staff are here to help and will respond shortly.`)
+        .setFooter(Config.Footer)
+        .setTimestamp();
+ 
+            settedParent.send(embedParent);
+            settedParent.send(`${message.author}`)
+        }).catch(err => {
+            message.channel.send("Oww! Error..");
+        });
+ 
+    }).catch(err => {
+        message.channel.send("Oww! Error..");
+    });
+ 
+}
+}
+        
 
  
 
