@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const Config = require('../config.json');
+const Config = require('../settings.json');
 const RoleConfig = require('../roleconfig.json');
 const Roles = require('../roleSettings.json');
 const categoryId = Config.TicketCaterogry;
