@@ -510,7 +510,7 @@ bot.on("message", message => {
       .setTitle(`List of all Devs`)
       .setDescription(
         message.guild.roles
-          .get("7024496")
+          .get("733369883563261952")
           .members.map(m => m.displayName)
           .join("\n")
       );
