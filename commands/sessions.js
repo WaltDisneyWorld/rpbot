@@ -63,7 +63,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                     );
                                     robloxranking.shout(
                                         gamekey,
-                                        6056958,
+                                      6997096,
                                         `A ${sessiontype} is currently being hosted by ${username} at ${timestarting} Eastern Standard Time. Why not come on down and attend?`
                                     );
                                     let embed = new Discord.RichEmbed()
@@ -74,7 +74,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                         .setColor("#5b9cc2")
                                         .setThumbnail(user.avatarURL);
 
-                                    channel3.send("<@&705890232062574612>");
+                                    channel3.send("<@&736253779787382864>");
                                     channel3.send(embed);
 
                                     const newSession = new SessionsDB({
