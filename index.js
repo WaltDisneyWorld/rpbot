@@ -367,7 +367,7 @@ bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     if (message.content.startsWith(prefix + "dm")) {
       if (message.member.roles.find(r => r.name === "Super Rank")) {
-        if (message.author.bot) return;
+      
         const mention = message.mentions.users.first();
 
         if (mention == null) {
