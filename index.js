@@ -90,7 +90,7 @@ const getId = function(username, cb) {
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     let role = message.guild.roles.find(
-      r => r.name === "Bot "
+      r => r.name === "Session Notifications"
     );
     const msg = message.content.toLowerCase();
     if (message.author.bot) return;
