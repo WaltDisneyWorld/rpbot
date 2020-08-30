@@ -27,7 +27,7 @@ const ChatlogDB = require("./chatlogs.js");
 //const awardDB = require("./awards.js");
 const embed = new Discord.RichEmbed();
 mongoose.connect(
-  "mongodb+srv://FreezeBall1:Test@cluster0-oovta.mongodb.net/fiberize", { useUnifiedTopology: true },
+  "mongodb://uywtow7awkdarbv5zjg3:I1Z4bfaisVpHqsDhOwg0@bj6m5bebcqeocep-mongodb.services.clever-cloud.com:27017/bj6m5bebcqeocep", { useUnifiedTopology: true },
 );
 app.get("/", (request, response) => {
   response.sendStatus(200);
@@ -90,7 +90,7 @@ const getId = function(username, cb) {
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
     let role = message.guild.roles.find(
-      r => r.name === "Session Notifications"
+      r => r.name === "Bot "
     );
     const msg = message.content.toLowerCase();
     if (message.author.bot) return;
