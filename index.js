@@ -129,6 +129,30 @@ bot.on("message", message => {
     }
   }
 });
+bot.on("message", message => {
+  if (message.channel.id === "737006629094162553") {
+    if (
+      message.content.includes("kick all") ||
+      message.content.includes("ban all") ||
+      message.content.includes(
+        "ref all" ||
+        message.content.includes("pban all") ||
+        message.content.includes("res all") ||
+        message.content.includes("give all") ||
+        message.content.includes("btools") ||
+        message.content.includes("speed")
+      )
+    ) {
+      let channel = message.guild.channels.find(
+        c => c.name === "hr"
+      );
+      channel.send(
+        `Possible AA attack @here ${message.author.username} used the command **${message.content}**`
+      );
+    }
+  }
+});
+
 
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
