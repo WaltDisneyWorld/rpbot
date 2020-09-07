@@ -2020,13 +2020,12 @@ bot.on("ready", () => {
 });
 
 bot.login(process.env.DISCORD_TOKEN);
-const config
-= require("./config.json");
+
 
 bot.login(process.env.token);
 const DBL = require("dblapi.js");
 const dbl = new DBL(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTI0NDE1NTgzMDI3MjAxMyIsImJvdCI6dHJ1ZSwiaWF0IjoxNTc4MjU5NjQ4fQ.G3D8NpBQkm3EpyGsCrIsBRwD8hhbW9JXY3y6REQjTlg",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjUxMjYxMzE0ODA2NTgwNyIsImJvdCI6dHJ1ZSwiaWF0IjoxNTkyODUzOTAxfQ.pYhG2u6wUlUDk2_h82bZ8RP8lsSG2vmi3jo7_VPGnjI",
   { webhookPort: 5000, webhookAuth: "password" }
 );
 dbl.webhook.on("ready", hook => {
@@ -2036,7 +2035,7 @@ dbl.webhook.on("ready", hook => {
 });
 dbl.webhook.on("vote", vote => {
   bot.channels
-    .get("668037271122870272")
+    .get("715702533846466674")
     .send(`User with ID ${vote.user} just voted!`);
 });
 process.on("unhandledRejection", err => {
