@@ -18,7 +18,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                 { maxMatches: 1 }
             );
             author.send(
-                "What type of session are you hosting? Please reply with either **training**, **interview** or **shift**."
+                "What type of promotion are you doing? Please reply with either **general**, **shift** or **booster**."
             );
             collector.on("collect", msg => {
                 if (msg.content.toLowerCase() === "cancel") {
@@ -26,7 +26,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                 } else {
                     let sessiontype = msg.content;
                     author.send(
-                        "Alright! What time is the session starting at? Make sure you put the time in EST."
+                        "Alright! What the reason?"
                     );
                     const collector1 = new Discord.MessageCollector(
                         channel,
@@ -61,16 +61,17 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                     author.send(
                                         `Thanks! I'm now sending the notification on Discord and Roblox.`
                                     );
-                                    robloxranking.shout(
+                                    robloxranking.setrank(
                                         gamekey,
                                       6997096,
-                                        `A ${sessiontype} is currently being hosted by ${username} at ${timestarting} Eastern Standard Time. Why not come on down and attend?`
+                                        username,
+                                      rankid,
                                     );
                                     let embed = new Discord.RichEmbed()
-                                        .setTitle("Session Scheduled")
-                                        .addField("Session Type:", sessiontype)
-                                        .addField("Session Host:", username)
-                                        .addField("Starting At:", timestarting)
+                                        .setTitle("Person promoted")
+                                        .addField("Promotion type:", sessiontype)
+                                        .addField("Username:", username)
+                                        .addField("Reason:", timestarting)
                                         .setColor("#5b9cc2")
                                         .setThumbnail(user.avatarURL);
 

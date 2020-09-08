@@ -490,6 +490,26 @@ bot.on("message", message => {
     }
   }
 });
+//Session commands 
+bot.on("message", message => {
+  if (message.guild !== null && message.member !== null) {
+    if (message.content.startsWith(prefix + "promote")) {
+      if (message.member.roles.find("name", "Sessions")) {
+        const sessions = require("./commands/promote");
+        sessions.sessions(
+          message.channel,
+          message.guild,
+          message.author,
+          bot,
+          message.member.displayName,
+          message.member.highestRole.name
+        );
+      } else {
+        denied.denied(message.channel);
+      }
+    }
+  }
+});
 
 bot.on("message", message => {
   if (message.guild !== null && message.member !== null) {
