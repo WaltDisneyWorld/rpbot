@@ -19,9 +19,9 @@ dependencies:
   trello-node-api: 0.0.8
   util: 0.12.3
   uuid: 7.0.3
-  ytdl-core: 2.0.1
-  ytpl: 0.1.20
-  ytsearcher: 1.2.2
+  ytdl-core: 3.4.1
+  ytpl: 1.0.1
+  ytsearcher: 1.2.3
 packages:
   /@types/node/14.11.10:
     dev: false
@@ -970,6 +970,10 @@ packages:
       '0': node >= 0.4.0
     resolution:
       integrity: sha1-DfKTUfByEWNRXfueVUPl9u7VFi8=
+  /html-entities/1.3.1:
+    dev: false
+    resolution:
+      integrity: sha512-rhE/4Z3hIhzHAUKbW8jVcCyuT5oJCXXqhN/6mXXVCpzTmvJnoH2HL/bt3EZ6p55jbFJBeAe1ZNpL5BugLujxNA==
   /htmlparser2/3.10.1:
     dependencies:
       domelementtype: 1.3.1
@@ -1238,6 +1242,15 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-QZCzhcfUliZfsOboi68QkNcMejPKTEhxE+s1TApvHubDeR8ythm4ViWuYFqgUwZeoHe8q0nsPxOvA3lQvdSzyg==
+  /m3u8stream/0.7.1:
+    dependencies:
+      miniget: 1.7.2
+      sax: 1.2.4
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-z6ldnAdhbuWOL6LmMkwptSZGzj+qbRytMKLTbNicwF/bJMjf9U9lqD57RNQUFecvWadEkzy6PDjcNJFFgi19uQ==
   /media-typer/0.3.0:
     dev: false
     engines:
@@ -1313,6 +1326,18 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-yrgaDSMRzrfYTkudB4Y6xK8pCb7oAH2bvfv6iPY2m6CedZfs9yK4b/ofh0Vzv08hCYXH/HHkoS8an6fkWtOAQA==
+  /miniget/1.7.2:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-USPNNK2bnHLOplX8BZVMehUkyQizS/DFpBdoH0TS+fM+hQoLNg9tWg4MeY9wE8gfY0pbzmx5UBEODujt3Lz8AA==
+  /miniget/2.0.1:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-MX+QfVIPAutz6c+T7WKuFKtjcw0nOyRRh1ubhTDD+z/e/pKcSAsfAV63aQKUgb1MFRT1GyfJeW53N5fHkX0wIA==
   /minimatch/3.0.4:
     dependencies:
       brace-expansion: 1.1.11
@@ -2324,17 +2349,17 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-HhFeLfjXU34h0FNHmSkSpKygdaYijSt8VNsC770VYBRFb+dyUKcm11cIKxu2MUSwT9znISZ0k1wFdaV/N5VW+Q==
-  /ytdl-core/2.0.1:
+  /ytdl-core/3.4.1:
     dependencies:
-      html-entities: 1.2.1
-      m3u8stream: 0.6.5
-      miniget: 1.7.0
+      html-entities: 1.3.1
+      m3u8stream: 0.7.1
+      miniget: 2.0.1
       sax: 1.2.4
     dev: false
     engines:
       node: '>=10'
     resolution:
-      integrity: sha512-PZBcVzQpkBxi9OQh9I4QIrYNmkbM/zh4QJQuxE8I6RojLUVYkkps5iLYquE3H+pwmBXtEXQMDJfVRajgdiz+iA==
+      integrity: sha512-eiGprr+w0Uo9no7FdeQja8JySnvBb3M9eV0m+sq37L5+d7YyQZ+xkP+I5yzuw5s2FWnBv5jMnoZmBZLPJmAKbg==
   /ytpl/0.1.20:
     dependencies:
       html-entities: 1.2.1
@@ -2343,10 +2368,23 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-iOvKzFZPtm2eoxQAlTWGcRfQo1MhKYSjf8B5eiiRvbcUHsOteQeychA/al1EcJrR7DuaR83nbu60gtAUbfEG6g==
+  /ytpl/1.0.1:
+    dependencies:
+      html-entities: 1.3.1
+      miniget: 2.0.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-v2TGepCZSoVYZAAPoHIz1Hr+auGBJb11npBY4PLAofAdQFlJMopGodmv3JENkW1ghxBW94CASfyOJ9bgpb+nEg==
   /ytsearcher/1.2.2:
     dev: false
     resolution:
       integrity: sha512-nQ38akKe3O2OGfQba0aTetMx25U/V+jD+MN1v26/lR497KyzpPIolQuNEf5x4O0ANvLLIS9iPSc91Zle1OP+ww==
+  /ytsearcher/1.2.3:
+    dev: false
+    resolution:
+      integrity: sha512-aKDDclajs2MhlZJfW5cYpEjycYN35CpA+QVsvtrSxFwKu9ZE5FYVMv3BkRZt3Z/yXyZBOxRTsxdnBwPHjDDQgQ==
 registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
@@ -2360,8 +2398,8 @@ specifiers:
   ffmpeg: ^0.0.4
   fs: ^0.0.2
   google-spreadsheet: ^3.0.11
-  mongodb: ^3.5.7
-  mongoose: ^5.9.9
+  mongodb: ^3.6.1
+  mongoose: ^5.10.9
   noblox.js: ^4.5.0
   path: ^0.12.7
   random-words: ^1.1.0
@@ -2371,6 +2409,6 @@ specifiers:
   trello-node-api: ^0.0.8
   util: ^0.12.1
   uuid: ^7.0.2
-  ytdl-core: ^2.0.1
-  ytpl: ^0.1.20
-  ytsearcher: ^1.2.2
+  ytdl-core: ^3.4.0
+  ytpl: ^1.0.0
+  ytsearcher: ^1.2.3
