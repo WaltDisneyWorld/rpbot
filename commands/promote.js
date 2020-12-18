@@ -7,6 +7,8 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
     channel.send(
         "Check your direct messages for more information."
     );
+  
+  // Promote isn't done bro dms
     var channel = null;
     if (channel == null) {
         author.createDM().then(chan => {
