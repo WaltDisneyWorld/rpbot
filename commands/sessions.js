@@ -1,5 +1,6 @@
 let Discord = require("discord.js");
 const robloxranking = require("robloxrankingservice");
+const roblox = require('noblox.js');
 const SessionsDB = require("../sessions.js");
 const ActivityDB = require("../activity.js");
 const gamekey = "xLQXxsZfUH6OAWtbPaXspaHlZgwJKMUjXRIr";
@@ -61,7 +62,7 @@ const sessions = (channel, guild, author, user, member, highestRole) => {
                                     author.send(
                                         `Thanks! I'm now sending the notification on Discord and Roblox.`
                                     );
-                                    robloxranking.shout(
+                                    roblox.shout(
                                         gamekey,
                                       6997096,
                                         `A ${sessiontype} is currently being hosted by ${username} at ${timestarting} Eastern Standard Time. Why not come on down and attend?`
